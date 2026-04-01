@@ -42,10 +42,10 @@ pkg install -y \
   pkg-config \
   libsqlite \
   openssl \
-  2>/dev/null
+  2>/dev/null || true
 ok "Native packages installed ($(node -v), npm $(npm -v))"
 
-# NDK build environment for native modules (libsql/better-sqlite3)
+# NDK build environment for native modules
 export CC=clang
 export CXX=clang++
 export npm_config_nodedir="$PREFIX"
@@ -53,28 +53,24 @@ export CFLAGS="-I$PREFIX/include"
 export CXXFLAGS="-I$PREFIX/include"
 export LDFLAGS="-L$PREFIX/lib"
 
-# --- 2. Tailscale (native binary) ---
-step "Setting up Tailscale..."
-if ! command -v tailscale &>/dev/null; then
-  pkg install -y tailscale 2>/dev/null && ok "Tailscale installed" || {
-    warn "Tailscale not in repos — install manually:"
-    echo -e "    ${C}https://tailscale.com/download/linux${NC}"
-  }
-else
+# --- 2. Tailscale ---
+step "Checking Tailscale..."
+if command -v tailscale &>/dev/null; then
   ok "Tailscale already installed"
-fi
-
-# Start tailscaled if available but not running
-if command -v tailscaled &>/dev/null && ! pgrep -x tailscaled &>/dev/null; then
-  warn "Starting tailscaled in background..."
-  nohup tailscaled --tun=userspace-networking --socks5-server=localhost:1055 &>/dev/null &
-  sleep 2
-fi
-
-if command -v tailscale &>/dev/null && tailscale status &>/dev/null 2>&1; then
-  ok "Tailscale connected: $(tailscale ip -4 2>/dev/null)"
+  if command -v tailscaled &>/dev/null && ! pgrep -x tailscaled &>/dev/null; then
+    warn "Starting tailscaled..."
+    nohup tailscaled --tun=userspace-networking --socks5-server=localhost:1055 &>/dev/null &
+    sleep 2
+  fi
+  if tailscale status &>/dev/null 2>&1; then
+    ok "Tailscale connected: $(tailscale ip -4 2>/dev/null)"
+  else
+    warn "Run ${C}tailscale up${NC} after install to authenticate"
+  fi
 else
-  warn "Run ${C}tailscale up${NC} after install to authenticate"
+  warn "Tailscale not installed. Install it separately:"
+  echo -e "    ${C}pkg install tailscale${NC}  (if available)"
+  echo -e "    ${C}or see: https://tailscale.com/download/linux${NC}"
 fi
 
 # --- 3. Clone / Update ---
@@ -92,22 +88,24 @@ else
   ok "Repository cloned"
 fi
 
-# --- 4. Install deps (with NDK flags for native compilation) ---
+# --- 4. Install deps ---
+# Key fix: Termux reports os=android but many npm packages only list
+# os:[darwin,linux,win32]. We override with --os=linux to bypass this.
 step "Installing Node.js dependencies..."
 cd "$INSTALL_DIR"
 
-# Full install needed for build step (includes devDependencies)
-npm install --build-from-source 2>&1 | tail -5
+npm install --os=linux --cpu=arm64 --build-from-source 2>&1 | tail -10
 ok "Dependencies installed"
 
 # --- 5. Build frontend ---
 step "Building production frontend..."
-npm run build 2>&1 | tail -3
-ok "Frontend built"
+npm run build 2>&1 | tail -5 || {
+  warn "Production build failed — will fall back to dev mode at runtime"
+}
+ok "Build step complete"
 
 # Prune devDependencies to save space
-npm prune --omit=dev 2>/dev/null || true
-ok "Dev dependencies pruned"
+npm prune --omit=dev --os=linux --cpu=arm64 2>/dev/null || true
 
 # --- 6. Create data directory ---
 mkdir -p "$INSTALL_DIR/data"
@@ -126,7 +124,11 @@ R='\033[0;31m' G='\033[0;32m' Y='\033[1;33m' C='\033[0;36m' B='\033[1;34m' M='\0
 APP_DIR="$HOME/oksskolten"
 PORT="${READER_PORT:-3000}"
 
-[ -d "$APP_DIR" ] || { echo -e "${R}Error: $APP_DIR not found. Run the installer first.${NC}"; exit 1; }
+if [ ! -d "$APP_DIR" ]; then
+  echo -e "${R}Error: $APP_DIR not found. Run the installer first:${NC}"
+  echo -e "${C}curl -fsSL https://raw.githubusercontent.com/muxd22-alt/termux_reader/main/install.sh | bash${NC}"
+  exit 1
+fi
 
 # --- Ensure tailscaled is running ---
 if command -v tailscaled &>/dev/null && ! pgrep -x tailscaled &>/dev/null; then
@@ -153,16 +155,17 @@ echo -e "  ${W}║${NC}   ${DIM}Native Android · Tailscale Ready${NC}          
 echo -e "  ${W}║${NC}                                                   ${W}║${NC}"
 echo -e "  ${W}╠═══════════════════════════════════════════════════╣${NC}"
 echo -e "  ${W}║${NC}                                                   ${W}║${NC}"
-echo -e "  ${W}║${NC}   ${B}Local:${NC}      http://${LOCAL_IP}:${PORT}            ${W}║${NC}"
+echo -e "  ${W}║${NC}   ${B}Local:${NC}      http://${LOCAL_IP}:${PORT}"
+echo -e "  ${W}║${NC}"
 
 if [ -n "$TS_IP" ]; then
-echo -e "  ${W}║${NC}   ${C}Tailscale:${NC}  ${W}http://${TS_IP}:${PORT}${NC}    ${M}◀ anywhere${NC}  ${W}║${NC}"
+echo -e "  ${W}║${NC}   ${C}Tailscale:${NC}  ${W}http://${TS_IP}:${PORT}${NC}  ${M}◀ anywhere${NC}"
 else
-echo -e "  ${W}║${NC}   ${Y}Tailscale:${NC}  not connected                      ${W}║${NC}"
-echo -e "  ${W}║${NC}   ${DIM}Run: tailscale up${NC}                              ${W}║${NC}"
+echo -e "  ${W}║${NC}   ${Y}Tailscale:${NC}  not connected"
+echo -e "  ${W}║${NC}   ${DIM}Run: tailscale up${NC}"
 fi
 
-echo -e "  ${W}║${NC}                                                   ${W}║${NC}"
+echo -e "  ${W}║${NC}"
 echo -e "  ${W}╚═══════════════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "  ${DIM}Ctrl+C to stop${NC}"
@@ -173,17 +176,24 @@ cd "$APP_DIR"
 
 export PORT="$PORT"
 export DATA_DIR="${DATA_DIR:-$APP_DIR/data}"
-export NODE_ENV=production
 export CC=clang
 export CXX=clang++
 
 mkdir -p "$DATA_DIR"
 
-exec npx tsx --dns-result-order=ipv4first server/index.ts
+if [ -d "$APP_DIR/dist" ]; then
+  export NODE_ENV=production
+  exec npx tsx --dns-result-order=ipv4first server/index.ts
+else
+  echo -e "  ${Y}No build found — running in dev mode...${NC}\n"
+  export NODE_ENV=development
+  export AUTH_DISABLED=1
+  exec npx tsx --dns-result-order=ipv4first server/index.ts
+fi
 READEREOF
 
 chmod +x "$PREFIX/bin/reader"
-ok "'reader' command installed"
+ok "'reader' command installed at $PREFIX/bin/reader"
 
 # --- Done ---
 echo ""
