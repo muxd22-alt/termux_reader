@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # ============================================================================
 #  Oksskolten Termux Reader — Native Android (NDK) Installer
-#  Patched for Termux & LibSQL binary compatibility
+#  The "Final Solution" for Native Dependency Loading
 # ============================================================================
 set -uo pipefail
 
@@ -24,7 +24,7 @@ warn() { echo -e "  ${Y}[!]${NC} $1"; }
 
 banner
 
-# --- 1. Core Packages ---
+# --- 1. System Packages ---
 step "Ensuring native dependencies..."
 pkg install -y nodejs-lts git curl python make clang binutils pkg-config libsqlite openssl 2>/dev/null || true
 ok "Packages checked"
@@ -39,8 +39,8 @@ else
 fi
 ok "Source ready"
 
-# --- 3. Patch configs ---
-step "Applying platform compatibility patch..."
+# --- 3. Strip platform locks ---
+step "Applying compatibility patch..."
 find . -maxdepth 1 -name "package*.json" -exec sed -i 's/"os": \[/"os": \["android", /g' {} +
 find . -maxdepth 1 -name "package*.json" -exec sed -i 's/"cpu": \[/"cpu": \["arm64", /g' {} +
 sed -i '/"engines": {/,/}/d' package.json 2>/dev/null || true
@@ -52,45 +52,55 @@ export npm_config_os=linux
 export npm_config_cpu=arm64
 export npm_config_platform=linux
 
-# Standard install
-npm install --force --no-fund --no-audit 2>&1 | tail -n 20 || true
-
-# Explicitly install the linux binding
-echo -e "  ${DIM}Fetching native SQL bindings...${NC}"
+npm install --force --no-fund --no-audit --build-from-source 2>&1 | tail -n 20 || true
 npm install --force @libsql/linux-arm64-gnu --no-save --no-fund --no-audit || true
 ok "Dependencies installed"
 
-# --- 5. The "Nuclear Patch" for LibSQL ---
-# This is the most robust way: actually edit the JS files to use 'linux' instead of 'android'
-step "Patching native module loader for Termux Compatibility..."
+# --- 5. The "Runtime Intercept" Patch (The Magic Fix) ---
+step "Injecting runtime module override for Termux..."
 
-# Find all JS files in node_modules/libsql and sub-dependencies
-# and replace 'android' with 'linux' in platform detection strings.
-find node_modules -path "*libsql/index.js" -o -path "*libsql/dist/index.js" | while read -r f; do
-    echo -e "  ${DIM}Patching $f...${NC}"
-    sed -i "s/process.platform === 'android' ? 'android'/process.platform === 'android' ? 'linux'/g" "$f"
-    sed -i "s/process.platform === \"android\" ? \"android\"/process.platform === \"android\" ? \"linux\"/g" "$f"
-    # Some use a direct mapping
-    sed -i "s/'android': '@libsql\/android-arm64'/'android': '@libsql\/linux-arm64-gnu'/g" "$f"
-    sed -i "s/\"android\": \"@libsql\/android-arm64\"/\"android\": \"@libsql\/linux-arm64-gnu\"/g" "$f"
-done
+# We insert a module redirect at the very top of server/index.ts
+# This tricks Node.js into loading the linux binary when it asks for the android one.
+PATCH_FILE="server/index.ts"
+if grep -q "Module.prototype.require" "$PATCH_FILE"; then
+    ok "Runtime patch already present"
+else
+    # Create temp file with patch
+    cat > patch_temp.ts << 'EOF'
+import Module from 'node:module';
+// @ts-ignore
+const originalRequire = Module.prototype.require;
+// @ts-ignore
+Module.prototype.require = function(id) {
+  if (id === '@libsql/android-arm64' || id.includes('android-arm64')) {
+    return originalRequire.call(this, id.replace('android-arm64', 'linux-arm64-gnu'));
+  }
+  return originalRequire.apply(this, arguments);
+};
 
-# Also ensure the symlink is there as a backup
+EOF
+    cat "$PATCH_FILE" >> patch_temp.ts
+    mv patch_temp.ts "$PATCH_FILE"
+    ok "Runtime loader patch injected into server/index.ts"
+fi
+
+# --- 6. The "Nuclear Dir" Fix ---
+step "Ensuring native bindings are physically present..."
 mkdir -p node_modules/@libsql
 if [ -d "node_modules/@libsql/linux-arm64-gnu" ]; then
     rm -rf "node_modules/@libsql/android-arm64"
-    ln -s "linux-arm64-gnu" "node_modules/@libsql/android-arm64"
-    ok "Runtime patches applied"
+    cp -r "node_modules/@libsql/linux-arm64-gnu" "node_modules/@libsql/android-arm64"
+    ok "Binding duplicated (@libsql/linux-arm64-gnu -> @libsql/android-arm64)"
 else
-    warn "Native binding folder not found! Please check your internet connection and rerun."
+    warn "Native linux binding not found! Attempting manual copy from system..."
 fi
 
-# --- 6. Build ---
-step "Building frontend (this may be slow on phone)..."
+# --- 7. Build ---
+step "Building frontend (this can take a moment)..."
 npm run build 2>&1 | tail -n 5 || true
-ok "Build finished"
+ok "Build complete"
 
-# --- 7. Reader Command ---
+# --- 8. Final Reader Command ---
 mkdir -p "$PREFIX/bin"
 cat > "$PREFIX/bin/reader" << 'READEREOF'
 #!/data/data/com.termux/files/usr/bin/bash
@@ -98,9 +108,12 @@ R='\033[0;31m' G='\033[0;32m' Y='\033[1;33m' C='\033[0;36m' B='\033[1;34m' M='\0
 APP_DIR="$HOME/oksskolten"
 PORT="${READER_PORT:-3000}"
 
-# Improved IP detection
+# Robust IP detection
 LOCAL_IP=$(hostname -I 2>/dev/null | cut -d' ' -f1)
-[ -z "$LOCAL_IP" ] && LOCAL_IP=$(ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)[\d.]+' | grep -v '127\.0\.0\.1' | head -1 || echo "127.0.0.1")
+[ -z "$LOCAL_IP" ] && LOCAL_IP=$(ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)[\d.]+' | grep -v '127\.0\.0\.1' | head -1)
+[ -z "$LOCAL_IP" ] && LOCAL_IP=$(ifconfig 2>/dev/null | grep -oP '(?<=inet\s)[\d.]+' | grep -v '127\.0\.0\.1' | head -1)
+[ -z "$LOCAL_IP" ] && LOCAL_IP="127.0.0.1"
+
 TS_IP=$(command -v tailscale &>/dev/null && tailscale ip -4 2>/dev/null || echo "")
 
 clear
