@@ -1,0 +1,16 @@
+{
+  "name": "jp-zenn",
+  "url": "https://zenn.dev/dev_user/articles/docker-multistage",
+  "lang": "ja",
+  "keySentences": [
+    "マルチステージビルドは、最終的なイメージサイズを大幅に削減する",
+    "ビルド用のステージと実行用のステージを分離する",
+    "Goアプリケーションは静的リンクされたバイナリを生成できる",
+    "Node.jsの場合は、ビルドステージでnpm ciとビルドを実行し",
+    ".dockerignoreファイルを適切に設定し"
+  ],
+  "knownNoise": [
+    "とても参考になりました",
+    "トレンド"
+  ]
+}

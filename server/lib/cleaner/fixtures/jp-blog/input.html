@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>TypeScriptの型システムを深く理解する</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/analytics.js"></script>
+  <style>.highlight { color: red; }</style>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a href="/">ホーム</a>
+      <a href="/blog">ブログ</a>
+      <a href="/about">About</a>
+    </nav>
+  </header>
+
+  <div class="ad-banner" id="ad-top">
+    <img src="/ads/banner.png" alt="advertisement banner">
+  </div>
+
+  <main>
+    <article>
+      <h1>TypeScriptの型システムを深く理解する</h1>
+      <div class="entry-meta">
+        <span class="date">2024-01-15</span>
+        <span class="author">田中太郎</span>
+      </div>
+
+      <div class="article-content">
+        <p>TypeScriptの型システムは非常に強力で、JavaScriptに静的型付けを追加します。この記事では、TypeScriptの高度な型機能について詳しく解説します。</p>
+
+        <h2>ジェネリクス</h2>
+        <p>ジェネリクスを使うことで、型安全性を保ちながら再利用可能なコンポーネントを作成できます。関数やクラスに型パラメータを渡すことで、柔軟なAPIを設計できます。</p>
+
+        <pre><code>function identity&lt;T&gt;(arg: T): T {
+  return arg;
+}</code></pre>
+
+        <h2>条件型</h2>
+        <p>条件型（Conditional Types）は、型レベルでの条件分岐を可能にします。これにより、入力の型に応じて出力の型を動的に決定できます。</p>
+
+        <h2>テンプレートリテラル型</h2>
+        <p>TypeScript 4.1で導入されたテンプレートリテラル型は、文字列リテラル型をテンプレートとして使用できる機能です。APIのルーティングやイベント名の型安全性に活用できます。</p>
+      </div>
+
+      <div class="tags">
+        <a href="/tags/typescript">TypeScript</a>
+        <a href="/tags/programming">プログラミング</a>
+      </div>
+    </article>
+  </main>
+
+  <aside class="sidebar">
+    <div class="widget">
+      <h3>人気の記事</h3>
+      <ul>
+        <li><a href="/post/1">React入門</a></li>
+        <li><a href="/post/2">Node.jsベストプラクティス</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <div id="comments">
+    <h3>コメント</h3>
+    <div class="comment-thread">
+      <p>素晴らしい記事です！</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 Tech Blog</p>
+    <nav class="footer-nav">
+      <a href="/privacy">プライバシーポリシー</a>
+    </nav>
+  </footer>
+
+  <script>
+    // tracking script
+    window.ga('send', 'pageview');
+  </script>
+  <noscript><img src="/pixel.gif"></noscript>
+  <div hidden>Hidden tracking div</div>
+</body>
+</html>

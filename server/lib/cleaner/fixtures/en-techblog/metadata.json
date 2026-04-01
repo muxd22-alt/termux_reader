@@ -1,0 +1,16 @@
+{
+  "name": "en-techblog",
+  "url": "https://example.com/blog/go-microservices",
+  "lang": "en",
+  "keySentences": [
+    "Microservices architecture has become the de facto standard",
+    "service discovery is crucial",
+    "gRPC is widely used for inter-service communication",
+    "Distributed tracing with OpenTelemetry"
+  ],
+  "knownNoise": [
+    "window.dataLayer",
+    "Subscribe to our premium content!",
+    "hidden element"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "image-heavy",
+  "url": "https://example.com/gallery/kyoto-autumn",
+  "lang": "en",
+  "keySentences": [
+    "Kyoto in autumn is one of the most beautiful places on earth",
+    "The Golden Pavilion, or Kinkaku-ji",
+    "Fushimi Inari is another must-visit destination",
+    "The bamboo grove at Arashiyama"
+  ],
+  "knownNoise": [
+    "initLightbox()",
+    "Please enable JavaScript for the lightbox feature"
+  ]
+}

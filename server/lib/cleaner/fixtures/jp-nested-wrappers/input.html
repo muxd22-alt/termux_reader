@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>Rustの所有権入門</title>
+  <meta property="og:image" content="/images/rust-cover.jpg">
+  <script>var ga = "UA-12345";</script>
+  <style>.hidden { display:none; }</style>
+</head>
+<body>
+  <header class="site-header">
+    <nav><a href="/">ホーム</a><a href="/articles">記事一覧</a></nav>
+  </header>
+
+  <div class="page-wrapper">
+    <div class="content-area">
+      <div class="article-container">
+        <div class="post-wrapper">
+          <article>
+            <div class="article-header-wrapper">
+              <div class="title-container">
+                <h1>Rustの所有権入門</h1>
+              </div>
+            </div>
+
+            <div class="article-body-wrapper">
+              <div class="text-content">
+                <div class="section-1">
+                  <p>Rustの所有権システムはメモリ安全性を保証する革新的な仕組みです。ガベージコレクタなしでメモリ管理を行えます。</p>
+                </div>
+
+                <div class="section-2">
+                  <div class="inner-wrapper">
+                    <h2>借用チェッカー</h2>
+                    <p>借用チェッカーはコンパイル時にエラーを検出する強力なツールです。実行時のオーバーヘッドはゼロです。</p>
+                  </div>
+                </div>
+
+                <div class="code-section">
+                  <div class="code-wrapper">
+                    <pre><code>fn main() {
+    let s1 = String::from("hello");
+    let s2 = &amp;s1;
+    println!("{}", s2);
+}</code></pre>
+                  </div>
+                </div>
+
+                <div class="section-3">
+                  <div class="paragraph-wrapper">
+                    <div class="text-inner">
+                      <p>ライフタイムは参照の有効期間を指定するための仕組みです。コンパイラが自動的に推論する場合もあります。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-wrapper">
+      <div class="sidebar-inner">
+        <div class="widget-area">
+          <h3>人気の記事</h3>
+          <ul><li><a href="/popular1">記事1</a></li></ul>
+        </div>
+        <div class="ad-space">
+          <p>広告スペース</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer"><p>© 2024 Rust Blog</p></footer>
+  <script>trackPageview();</script>
+</body>
+</html>

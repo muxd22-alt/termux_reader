@@ -1,0 +1,543 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`cleaning pipeline — snapshot tests > snapshot: en-ars-technica (en) 1`] = `
+"
+    <p>As quantum computers grow more powerful, the cryptographic algorithms that protect everything from banking transactions to military communications face an existential threat. The race to develop quantum-resistant encryption has never been more urgent.</p>
+    <p>In August 2024, NIST finalized its first set of post-quantum cryptography standards, marking a watershed moment in the field. The three selected algorithms — ML-KEM (formerly CRYSTALS-Kyber), ML-DSA (formerly CRYSTALS-Dilithium), and SLH-DSA (formerly SPHINCS+) — represent years of rigorous analysis and competition.</p>
+    <h2>The Quantum Threat</h2>
+    <p>Shor's algorithm, when run on a sufficiently powerful quantum computer, can factor large numbers exponentially faster than any known classical algorithm. This directly threatens RSA and elliptic curve cryptography, which underpin virtually all secure communications on the internet.</p>
+    <p>While current quantum computers are far from being able to break modern encryption, the "harvest now, decrypt later" threat is real. Adversaries can intercept and store encrypted data today, waiting for quantum computers powerful enough to decrypt it in the future.</p>
+    <h2>Lattice-Based Cryptography</h2>
+    <p>The majority of NIST's selected algorithms are based on lattice problems — mathematical structures that are believed to be resistant to both classical and quantum attacks. The Shortest Vector Problem (SVP) and its variants form the security foundation of these schemes.</p>
+    
+    <h2>Migration Challenges</h2>
+    <p>Migrating existing systems to post-quantum cryptography is a massive undertaking. Organizations must inventory their cryptographic assets, prioritize systems handling long-lived secrets, and test compatibility with the new algorithms.</p>
+  "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: en-attrs-heavy (en) 1`] = `
+"<article>
+    
+
+    <p>
+      Machine learning models require careful feature engineering to achieve good performance.
+      The quality of features directly impacts model accuracy.
+    </p>
+
+    
+      <h2>Validation Methods</h2>
+
+      <p>
+        Cross-validation helps prevent overfitting by testing the model on multiple data splits.
+        K-fold cross-validation is the most common approach.
+      </p>
+
+      <pre><code data-lang="python">from sklearn.model_selection import cross_val_score
+scores = cross_val_score(model, X, y, cv=5)</code></pre>
+
+      <p>
+        Gradient descent converges to a local minimum when the learning rate is properly tuned.
+        Adaptive methods like Adam adjust the rate automatically.
+      </p>
+
+      <p><img src="https://example.com/images/gradient.png" alt="Gradient Descent" width="800" height="400">
+    </p>
+
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" data-chart="loss">
+      <circle cx="50" cy="50" r="40" fill="blue" stroke="black" stroke-width="2"></circle>
+      <text x="50" y="55" text-anchor="middle" fill="white">Loss</text>
+    </svg>
+
+    <table>
+      <thead><tr><th>Method</th><th>Accuracy</th></tr></thead>
+      <tbody>
+        <tr><td>Linear</td><td>0.85</td></tr>
+        <tr><td>SVM</td><td>0.92</td></tr>
+      </tbody>
+    </table>
+  </article>"
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: en-docs (en) 1`] = `
+"
+        <section>
+          <h2>Overview</h2>
+          <p>Our API supports two authentication methods: OAuth 2.0 for user-level access and API keys for server-to-server communication. All API requests must be authenticated.</p>
+        </section>
+
+        <section>
+          <h2>OAuth 2.0</h2>
+          <p>OAuth 2.0 is the recommended authentication method for applications that access resources on behalf of users. We support the Authorization Code flow and the Client Credentials flow.</p>
+
+          <h3>Authorization Code Flow</h3>
+          <p>The authorization code flow is used when your application needs to access the API on behalf of a specific user. The flow involves redirecting the user to our authorization server, obtaining an authorization code, and exchanging it for an access token.</p>
+
+          <pre><code>POST /oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&amp;
+code=AUTH_CODE&amp;
+redirect_uri=https://yourapp.com/callback&amp;
+client_id=YOUR_CLIENT_ID&amp;
+client_secret=YOUR_CLIENT_SECRET</code></pre>
+        </section>
+
+        <section>
+          <h2>API Keys</h2>
+          <p>API keys provide a simpler authentication mechanism for server-to-server integrations. Include your API key in the Authorization header of every request.</p>
+
+          <pre><code>curl -H "Authorization: Bearer YOUR_API_KEY" \\
+  https://api.example.com/v1/resources</code></pre>
+
+          <table>
+            <thead>
+              <tr><th>Scope</th><th>Description</th><th>Access Level</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>read</td><td>Read-only access</td><td>Basic</td></tr>
+              <tr><td>write</td><td>Read and write access</td><td>Standard</td></tr>
+              <tr><td>admin</td><td>Full administrative access</td><td>Admin</td></tr>
+            </tbody>
+          </table>
+        </section>
+      "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: en-empty-elements (en) 1`] = `
+"<div>
+    <h2>Kubernetes Orchestration Guide</h2>
+
+    
+    
+    
+
+    <p>Kubernetes orchestrates containerized applications across clusters of machines, providing automated deployment and scaling.</p>
+
+    
+
+    <h2>Pods</h2>
+
+    
+    
+
+    <p>Pods are the smallest deployable units in Kubernetes. Each pod contains one or more containers that share storage and network resources.</p>
+
+    <p><img src="https://example.com/images/pod-diagram.png" alt="Pod Architecture">
+    </p>
+
+    
+
+    <h2>Services</h2>
+
+    <p>Services provide stable networking for pods. They abstract away pod IP addresses and enable load balancing.</p>
+
+    <pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: web
+  ports:
+    - port: 80</code></pre>
+
+    <hr>
+
+    
+
+    <br>
+
+    <table>
+      <tbody><tr><th>Resource</th><th>Purpose</th></tr>
+      <tr><td>Pod</td><td>Run containers</td></tr>
+      <tr><td>Service</td><td>Networking</td></tr>
+    </tbody></table>
+
+    
+    
+  </div>"
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: en-github-blog (en) 1`] = `
+"
+    <p>Today we are excited to announce GitHub Copilot Workspace, a new developer environment that reimagines how software is built from idea to implementation.</p>
+    <p>Copilot Workspace starts with a natural language description of a task and builds a complete plan for implementing it. The developer can then review, modify, and execute the plan within the workspace.</p>
+    <h2>From Issue to Pull Request</h2>
+    <p>The typical workflow begins when a developer opens a GitHub issue. Copilot Workspace analyzes the issue description, the repository structure, and relevant code to propose a step-by-step implementation plan.</p>
+    <p>Each step in the plan includes specific file modifications, new file creation, or deletion suggestions. The developer has full control to accept, reject, or modify any suggested change before it is applied.</p>
+    <h2>Integrated Development Flow</h2>
+    <p>What makes Copilot Workspace unique is its deep integration with the GitHub platform. Changes are automatically committed to a branch, CI/CD pipelines run against the proposed changes, and pull requests are created with full context.</p>
+    <h2>Early Access</h2>
+    <p>Copilot Workspace is now available in technical preview for GitHub Copilot Enterprise customers. We are collecting feedback to refine the experience before a broader launch later this year.</p>
+  "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: en-medium (en) 1`] = `
+"
+        <p>Rust has been gaining tremendous momentum in the systems programming world. For seven consecutive years, it has been voted the most loved programming language in Stack Overflow's developer survey.</p>
+
+        <p>What makes Rust special is its ownership system. Unlike C and C++, Rust guarantees memory safety at compile time without needing a garbage collector. This eliminates entire classes of bugs including null pointer dereferences, buffer overflows, and data races.</p>
+
+        <p>Like this article? Follow me for more content like this.</p>
+
+        <h2>Memory Safety Without Garbage Collection</h2>
+        <p>The borrow checker is Rust's most distinctive feature. It enforces strict rules about how references to data are created and used. At any given time, you can have either one mutable reference or any number of immutable references to a piece of data.</p>
+
+        <pre><code>fn main() {
+    let mut s = String::from("hello");
+    let r1 = &amp;s;    // immutable borrow - ok
+    let r2 = &amp;s;    // another immutable borrow - ok
+    println!("{} and {}", r1, r2);
+    // r1 and r2 are no longer used after this point
+    let r3 = &amp;mut s; // mutable borrow - ok because r1, r2 are done
+    println!("{}", r3);
+}</code></pre>
+
+        <h2>Fearless Concurrency</h2>
+        <p>Rust's type system and ownership model make it possible to write concurrent code that is free from data races. The compiler catches potential race conditions at compile time, which is a game-changer for systems programming.</p>
+
+        
+
+        <h2>Industry Adoption</h2>
+        <p>Major companies are adopting Rust for critical infrastructure. Microsoft is using Rust in Windows kernel components. Google has added Rust as a supported language for Android development. Amazon Web Services uses Rust for performance-critical services like Firecracker.</p>
+      "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: en-nbsp-comments (en) 1`] = `
+"<article>
+    
+    
+
+    
+    
+    
+
+    <p>WebAssembly enables near-native performance in web browsers. It provides a compilation target for languages like C++, Rust, and Go.</p>
+
+    
+    
+
+    <h2>Multi-language Support</h2>
+
+    <p>WASM modules can be compiled from multiple languages, making it a versatile platform. Each language brings its own strengths to the web platform.</p>
+
+    
+    <pre><code>// Rust to WASM
+#[wasm_bindgen]
+pub fn add(a: i32, b: i32) -&gt; i32 {
+    a&nbsp;+&nbsp;b
+}</code></pre>
+    
+
+    
+    <h2>Memory Model</h2>
+
+    <p>The linear memory model provides sandboxed execution for WebAssembly modules. Memory is isolated from the host environment.</p>
+
+    
+    <table>
+      <tbody><tr><th>Language</th><th>Relative Speed</th></tr>
+      <tr><td>Native C++</td><td>1.0x</td></tr>
+      <tr><td>WASM</td><td>1.1x</td></tr>
+      <tr><td>JavaScript</td><td>3.5x</td></tr>
+    </tbody></table>
+
+    
+  </article>"
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: en-personal-blog (en) 1`] = `
+"<article>
+      
+      <p>Last weekend I decided to take a break from coding and go hiking at Mount Takao, a beautiful mountain just west of Tokyo. The weather was perfect for a hike.</p>
+
+      <p>The trail starts at the base station and winds through a dense forest of cedar trees. The air is fresh and the sounds of the city quickly fade away as you ascend.</p>
+
+      <figure>
+        <img src="https://example.com/photos/takao-summit.jpg" alt="View from the summit of Mount Takao">
+        <figcaption>The view from the summit was breathtaking</figcaption>
+      </figure>
+
+      <p>At the summit, you can see all the way to Mount Fuji on a clear day. I was lucky enough to get a perfect view. The round trip took about 3 hours at a comfortable pace.</p>
+
+      <p>I highly recommend Mount Takao for anyone looking for an easy day hike near Tokyo. It is accessible by train and the trails are well-maintained.</p>
+    </article>"
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: en-substack (en) 1`] = `
+"
+        <p>WebAssembly (Wasm) has evolved far beyond its original browser-based use case. In 2024, we are seeing Wasm being used in server-side computing, edge functions, plugin systems, and even blockchain smart contracts.</p>
+
+        <h2>WASI: Beyond the Browser</h2>
+        <p>The WebAssembly System Interface (WASI) is perhaps the most exciting development in the Wasm ecosystem. WASI provides a standardized set of system calls that allow Wasm modules to interact with the operating system in a sandboxed manner.</p>
+
+        
+
+        <h2>Component Model</h2>
+        <p>The Wasm Component Model introduces a way to compose Wasm modules together, enabling language-agnostic plugin systems. This is a major step forward for interoperability between different programming languages compiled to Wasm.</p>
+
+        <p>Docker has integrated Wasm support, allowing developers to run Wasm containers alongside traditional Linux containers. This significantly reduces container startup times and memory footprint.</p>
+
+        <h2>Performance Benchmarks</h2>
+        <p>Recent benchmarks show that Wasm execution speed is within 10-20% of native code for most workloads. With ongoing improvements to the JIT compilation pipeline, this gap is expected to narrow further.</p>
+      "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: en-techblog (en) 1`] = `
+"<article>
+      
+      
+
+      
+        <p>Microservices architecture has become the de facto standard for building large-scale distributed systems. Go, with its excellent concurrency support and small memory footprint, is an ideal choice for microservices.</p>
+
+        <h2>Service Discovery</h2>
+        <p>In a microservices architecture, service discovery is crucial. Services need to find and communicate with each other dynamically. Popular solutions include Consul, etcd, and Kubernetes service discovery.</p>
+
+        <h2>Inter-Service Communication</h2>
+        <p>gRPC is widely used for inter-service communication due to its efficiency and strong typing. Protocol Buffers provide a language-neutral way to define service interfaces.</p>
+
+        <pre><code>func main() {
+    srv := grpc.NewServer()
+    pb.RegisterUserServiceServer(srv, &amp;userService{})
+    srv.Serve(lis)
+}</code></pre>
+
+        <h2>Observability</h2>
+        <p>Distributed tracing with OpenTelemetry, structured logging, and Prometheus metrics are essential for operating microservices in production. Without proper observability, debugging issues across services becomes extremely difficult.</p>
+      
+    </article>"
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: image-heavy (en) 1`] = `
+"<article>
+      
+
+      
+        <p>Kyoto in autumn is one of the most beautiful places on earth. The maple trees turn brilliant shades of red, orange, and gold, creating a stunning backdrop for the ancient temples and shrines.</p>
+
+        <figure>
+          <picture>
+            <source srcset="https://example.com/photos/kinkakuji-large.webp" type="image/webp">
+            <source srcset="https://example.com/photos/kinkakuji-large.jpg" type="image/jpeg">
+            <img src="https://example.com/photos/kinkakuji.jpg" alt="Kinkaku-ji (Golden Pavilion) surrounded by autumn leaves">
+          </picture>
+          <figcaption>Kinkaku-ji reflected in the mirror pond</figcaption>
+        </figure>
+
+        <p>The Golden Pavilion, or Kinkaku-ji, is perhaps the most iconic sight in Kyoto. During autumn, the golden structure is framed by brilliant red maples, creating a scene of extraordinary beauty.</p>
+
+        <figure>
+          <img src="https://example.com/photos/fushimi-inari.jpg" alt="Fushimi Inari shrine gates">
+          <figcaption>The famous torii gates of Fushimi Inari</figcaption>
+        </figure>
+
+        <p>Fushimi Inari is another must-visit destination. The thousands of vermillion torii gates create a striking contrast against the autumn foliage. Early morning visits offer the best light for photography.</p>
+
+        <figure>
+          <img src="https://example.com/photos/arashiyama.jpg" alt="Arashiyama bamboo grove">
+          <figcaption>The bamboo grove at Arashiyama</figcaption>
+        </figure>
+
+        <p>The bamboo grove at Arashiyama is a unique experience. While the bamboo stays green year-round, the surrounding mountains display beautiful autumn colors that complement the grove.</p>
+      
+    </article>"
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: jp-blog (ja) 1`] = `
+"
+        <p>TypeScriptの型システムは非常に強力で、JavaScriptに静的型付けを追加します。この記事では、TypeScriptの高度な型機能について詳しく解説します。</p>
+
+        <h2>ジェネリクス</h2>
+        <p>ジェネリクスを使うことで、型安全性を保ちながら再利用可能なコンポーネントを作成できます。関数やクラスに型パラメータを渡すことで、柔軟なAPIを設計できます。</p>
+
+        <pre><code>function identity&lt;T&gt;(arg: T): T {
+  return arg;
+}</code></pre>
+
+        <h2>条件型</h2>
+        <p>条件型（Conditional Types）は、型レベルでの条件分岐を可能にします。これにより、入力の型に応じて出力の型を動的に決定できます。</p>
+
+        <h2>テンプレートリテラル型</h2>
+        <p>TypeScript 4.1で導入されたテンプレートリテラル型は、文字列リテラル型をテンプレートとして使用できる機能です。APIのルーティングやイベント名の型安全性に活用できます。</p>
+      "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: jp-br-heavy (ja) 1`] = `
+"
+    
+
+    <p>TypeScriptの型システムは構造的部分型を採用しています。これにより柔軟で安全な型チェックが可能になります。</p>
+
+    
+
+    <h2>ジェネリクス</h2>
+
+    <p>ジェネリクスを使うことで再利用可能なコードを書けるようになります。型パラメータにより関数やクラスを汎用化できます。</p>
+
+    <pre><code>function identity&lt;T&gt;(arg: T): T {
+  return arg;
+}
+
+const result = identity&lt;string&gt;("hello");</code></pre>
+
+    <h2>条件型</h2>
+
+    <p>条件型は高度な型レベルプログラミングを可能にする強力な機能です。extends キーワードを使って型の分岐を表現します。</p>
+
+    <pre><code>type IsString&lt;T&gt; = T extends string ? "yes" : "no";
+type A = IsString&lt;string&gt;;  // "yes"
+type B = IsString&lt;number&gt;;  // "no"</code></pre>
+
+    "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: jp-hatena (ja) 1`] = `
+"
+    <p>Go言語の最大の特徴の一つは、goroutineとchannelによる並行処理モデルです。この記事では、実務でよく使われる並行処理パターンを紹介します。</p>
+    <h2>Fan-Out / Fan-In パターン</h2>
+    <p>Fan-Outは一つのチャネルからの入力を複数のgoroutineに分散させるパターンです。Fan-Inはその逆で、複数のチャネルからの出力を一つのチャネルに集約します。このパターンはCPUバウンドな処理の並列化に特に有効です。</p>
+    <h2>Worker Pool パターン</h2>
+    <p>Worker Poolパターンは、固定数のgoroutineが共有のジョブキューからタスクを取り出して処理するパターンです。リソースの使用量を制御しながら並行処理を行うことができます。</p>
+    <pre><code>func worker(id int, jobs &lt;-chan int, results chan&lt;- int) {
+    for j := range jobs {
+        results &lt;- j * 2
+    }
+}</code></pre>
+    <h2>Context によるキャンセレーション</h2>
+    <p>Go 1.7で導入されたcontextパッケージは、goroutine間のキャンセレーション伝播とデッドライン管理を提供します。長時間実行されるgoroutineは必ずcontextを受け取り、Done()チャネルを監視すべきです。</p>
+    <p>これらのパターンを適切に組み合わせることで、堅牢でスケーラブルな並行処理システムを構築できます。重要なのは、共有メモリではなくチャネルによるコミュニケーションを優先することです。</p>
+  "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: jp-nested-wrappers (ja) 1`] = `
+"<article>
+            
+
+            
+                <p>Rustの所有権システムはメモリ安全性を保証する革新的な仕組みです。ガベージコレクタなしでメモリ管理を行えます。</p>
+
+                
+                    <h2>借用チェッカー</h2>
+                    <p>借用チェッカーはコンパイル時にエラーを検出する強力なツールです。実行時のオーバーヘッドはゼロです。</p>
+                  
+
+                <pre><code>fn main() {
+    let s1 = String::from("hello");
+    let s2 = &amp;s1;
+    println!("{}", s2);
+}</code></pre>
+
+                <p>ライフタイムは参照の有効期間を指定するための仕組みです。コンパイラが自動的に推論する場合もあります。</p>
+              
+          </article>"
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: jp-news (ja) 1`] = `
+"
+        <p>人工知能技術は急速に進化しており、特に大規模言語モデル（LLM）の分野では画期的な進歩が続いています。企業や研究機関がこの分野に巨額の投資を行っています。</p>
+
+        <p>最新の研究によると、モデルのパラメータ数を増やすだけでなく、学習データの品質向上やアーキテクチャの改善が性能向上に重要であることが分かっています。</p>
+
+        <figure>
+          <img src="https://example.com/images/ai-chart.png" alt="AI市場の成長グラフ">
+          <figcaption>AI市場は年率30%で成長</figcaption>
+        </figure>
+
+        <p>日本企業もこの流れに乗り、独自のLLM開発を進めています。特に日本語に特化したモデルの開発は、国内市場において重要な意味を持ちます。</p>
+
+        <h2>マルチモーダルAIの台頭</h2>
+        <p>テキストだけでなく、画像や音声を統合的に処理するマルチモーダルAIが注目を集めています。これにより、より自然なインタラクションが可能になります。</p>
+      "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: jp-news-noisy (ja) 1`] = `
+"
+        <p>量子コンピュータは、量子力学の原理を利用して従来のコンピュータでは解けない問題を効率的に解くことができる次世代の計算機です。しかし、実用化にはまだ多くの技術的課題が残されています。</p>
+
+        <p>最大の課題はエラー訂正です。量子ビットは環境ノイズに非常に敏感で、計算中にエラーが発生しやすいという特性があります。現在の量子コンピュータはNISQ（Noisy Intermediate-Scale Quantum）と呼ばれる段階にあり、大規模な計算には十分な精度を持っていません。</p>
+
+        <p>ここに広告が入ります</p>
+
+        <h2>量子超越性の実証</h2>
+        <p>Googleは2019年にSycamoreプロセッサを使って量子超越性を実証しました。古典コンピュータで1万年かかる計算を200秒で完了したと報告しています。ただし、この主張には異論もあり、IBMは古典コンピュータでも2.5日で同じ計算が可能だと反論しています。</p>
+
+        
+
+        <h2>産業応用の展望</h2>
+        <p>量子コンピュータの応用が期待される分野として、創薬シミュレーション、金融リスク分析、物流最適化、材料科学などがあります。特に分子シミュレーションは量子コンピュータの得意分野であり、新薬開発の加速に貢献すると期待されています。</p>
+
+        <h3>ニュースレターに登録</h3>
+          
+        
+
+        <p>日本でも理化学研究所が国産量子コンピュータの開発を進めており、2023年には64量子ビットのシステムをクラウドで公開しました。</p>
+      "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: jp-note (ja) 1`] = `
+"
+    <p>技術文書を書くスキルは、エンジニアにとってコードを書くスキルと同じくらい重要です。良い技術文書は、チームの生産性を大幅に向上させ、知識の共有を促進します。</p>
+    <h2>読者を意識する</h2>
+    <p>技術文書を書く際の最も重要な原則は、読者を明確に定義することです。初心者向けのチュートリアルとAPIリファレンスでは、求められる詳細度も文体も大きく異なります。</p>
+    <h2>構造化された文書</h2>
+    <p>技術文書は論理的な構造を持つべきです。目的の明示から始まり、前提条件、手順、トラブルシューティングと進むのが一般的なパターンです。見出しを適切に使い、読者がスキャンしやすい文書を心がけましょう。</p>
+    <h2>コード例の書き方</h2>
+    <p>コード例は最小限かつ完全であるべきです。読者がコピー＆ペーストして動作確認できるように、必要な import 文やセットアップコードも含めます。ただし、本題と関係のないボイラープレートは省略します。</p>
+    <p>これらの原則を日々の開発ドキュメントやブログ記事の執筆に適用することで、より伝わりやすい技術コンテンツを作成できるようになります。</p>
+  "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: jp-zenn (ja) 1`] = `
+"
+        <p>Dockerのマルチステージビルドは、最終的なイメージサイズを大幅に削減するための重要なテクニックです。この記事では、実際のプロジェクトでマルチステージビルドを活用する方法を解説します。</p>
+
+        <h2>なぜマルチステージビルドが必要なのか</h2>
+        <p>シングルステージビルドでは、ビルドツールやコンパイラがイメージに含まれてしまい、最終イメージが不必要に大きくなります。マルチステージビルドでは、ビルド用のステージと実行用のステージを分離することで、この問題を解決します。</p>
+
+        <pre><code># Build stage
+FROM golang:1.22 AS builder
+WORKDIR /app
+COPY . .
+RUN go build -o server .
+
+# Runtime stage
+FROM alpine:3.19
+COPY --from=builder /app/server /usr/local/bin/
+CMD ["server"]</code></pre>
+
+        <h2>Go アプリケーションの例</h2>
+        <p>Goアプリケーションは静的リンクされたバイナリを生成できるため、マルチステージビルドとの相性が非常に良いです。ビルドステージでコンパイルし、実行ステージでは軽量なalpineイメージにバイナリだけをコピーします。</p>
+
+        <h2>Node.js アプリケーションの例</h2>
+        <p>Node.jsの場合は、ビルドステージでnpm ciとビルドを実行し、実行ステージではproduction dependenciesのみをインストールします。これにより、devDependenciesやビルドキャッシュを除外できます。</p>
+
+        <h2>ベストプラクティス</h2>
+        <p>.dockerignoreファイルを適切に設定し、node_modulesやテストファイルをビルドコンテキストから除外することも重要です。また、キャッシュを活用するためにCOPYの順序にも注意が必要です。</p>
+      "
+`;
+
+exports[`cleaning pipeline — snapshot tests > snapshot: mixed-lang (ja) 1`] = `
+"
+    <p>React Server Components（RSC）は、Reactのアーキテクチャに大きな変革をもたらしました。この記事では、Next.js App Routerを使った実践的なRSCの活用方法を解説します。</p>
+    <h2>Server Components vs Client Components</h2>
+    <p>Server Componentsはサーバー側でのみレンダリングされ、JavaScriptバンドルに含まれません。一方、Client Componentsはブラウザで実行され、インタラクティビティを提供します。use clientディレクティブで明示的に区別します。</p>
+    <pre><code>// Server Component (default in App Router)
+async function UserProfile({ userId }: { userId: string }) {
+  const user = await db.user.findUnique({ where: { id: userId } })
+  return &lt;div&gt;{user.name}&lt;/div&gt;
+}
+
+// Client Component
+'use client'
+function LikeButton() {
+  const [liked, setLiked] = useState(false)
+  return &lt;button onClick={() =&gt; setLiked(!liked)}&gt;Like&lt;/button&gt;
+}</code></pre>
+    <h2>Data Fetching パターン</h2>
+    <p>RSCの最大のメリットは、コンポーネント内で直接データベースクエリやAPI呼び出しを行えることです。これにより、waterfall問題を解消し、必要なデータを効率的に取得できます。</p>
+    <h2>Streaming と Suspense</h2>
+    <p>Server ComponentsはReact Suspenseと組み合わせることで、段階的なストリーミングレンダリングを実現できます。遅いデータフェッチがあっても、準備ができた部分から順にクライアントに送信されます。</p>
+    <p>RSCはまだ進化の途中ですが、適切に使えばユーザー体験とDeveloper Experienceの両方を大幅に改善できるパラダイムです。</p>
+  "
+`;

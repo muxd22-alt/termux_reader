@@ -1,0 +1,21 @@
+{
+  "name": "jp-news-noisy",
+  "url": "https://example.com/science/quantum-computing",
+  "lang": "ja",
+  "keySentences": [
+    "量子コンピュータは、量子力学の原理を利用して",
+    "最大の課題はエラー訂正です",
+    "Googleは2019年にSycamoreプロセッサを使って量子超越性を実証",
+    "創薬シミュレーション、金融リスク分析、物流最適化",
+    "理化学研究所が国産量子コンピュータの開発を進めており"
+  ],
+  "knownNoise": [
+    "人気記事ランキング",
+    "非常に分かりやすい記事でした",
+    "trackPageView"
+  ],
+  "knownNoiseRequiresScoring": [
+    "ここに広告が入ります",
+    "ニュースレターに登録"
+  ]
+}

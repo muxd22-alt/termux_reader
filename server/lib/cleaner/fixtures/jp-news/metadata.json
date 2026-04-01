@@ -1,0 +1,16 @@
+{
+  "name": "jp-news",
+  "url": "https://example.com/tech/ai-trends",
+  "lang": "ja",
+  "keySentences": [
+    "人工知能技術は急速に進化しており",
+    "学習データの品質向上やアーキテクチャの改善が性能向上に重要",
+    "日本企業もこの流れに乗り",
+    "マルチモーダルAIが注目を集めています"
+  ],
+  "knownNoise": [
+    "trackPageView()",
+    "tracking pixel",
+    "ニュースレター登録"
+  ]
+}

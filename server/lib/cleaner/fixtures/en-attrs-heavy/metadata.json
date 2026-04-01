@@ -1,0 +1,15 @@
+{
+  "name": "en-attrs-heavy",
+  "url": "https://example.com/blog/tracking-attrs",
+  "lang": "en",
+  "keySentences": [
+    "Machine learning models require careful feature engineering",
+    "Cross-validation helps prevent overfitting",
+    "Gradient descent converges to a local minimum"
+  ],
+  "knownNoise": [
+    "data-tracking",
+    "onclick",
+    "data-analytics-id"
+  ]
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>The State of WebAssembly in 2024</title>
+  <script src="/app.js"></script>
+  <style>.paywall { backdrop-filter: blur(5px); }</style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo"><a href="/">Tech Deep Dive</a></div>
+    <nav>
+      <a href="/archive">Archive</a>
+      <a href="/about">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h1>The State of WebAssembly in 2024</h1>
+      <div class="post-meta">
+        <div class="author-info">
+          <img src="/avatars/sarah.jpg" class="avatar" alt="Sarah Chen">
+          <div>
+            <span class="author-name">Sarah Chen</span>
+            <span class="pub-date">March 1, 2024</span>
+          </div>
+        </div>
+        <div class="post-ufi-button">
+          <button>Like</button>
+          <button>Comment</button>
+          <button>Share</button>
+        </div>
+      </div>
+
+      <div class="body">
+        <p>WebAssembly (Wasm) has evolved far beyond its original browser-based use case. In 2024, we are seeing Wasm being used in server-side computing, edge functions, plugin systems, and even blockchain smart contracts.</p>
+
+        <h2>WASI: Beyond the Browser</h2>
+        <p>The WebAssembly System Interface (WASI) is perhaps the most exciting development in the Wasm ecosystem. WASI provides a standardized set of system calls that allow Wasm modules to interact with the operating system in a sandboxed manner.</p>
+
+        <div class="subscribe c-subscribe" data-area="inline-cta">
+          <h3>Subscribe to Tech Deep Dive</h3>
+          <p>Get the latest tech analysis delivered to your inbox.</p>
+          <form>
+            <input type="email" placeholder="your@email.com">
+            <button>Subscribe</button>
+          </form>
+        </div>
+
+        <h2>Component Model</h2>
+        <p>The Wasm Component Model introduces a way to compose Wasm modules together, enabling language-agnostic plugin systems. This is a major step forward for interoperability between different programming languages compiled to Wasm.</p>
+
+        <p>Docker has integrated Wasm support, allowing developers to run Wasm containers alongside traditional Linux containers. This significantly reduces container startup times and memory footprint.</p>
+
+        <h2>Performance Benchmarks</h2>
+        <p>Recent benchmarks show that Wasm execution speed is within 10-20% of native code for most workloads. With ongoing improvements to the JIT compilation pipeline, this gap is expected to narrow further.</p>
+      </div>
+
+      <div class="post-bottom">
+        <div class="post-links">
+          <a href="/p/previous">Previous</a>
+          <a href="/p/next">Next</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <div id="comments">
+    <div class="comment-thread">
+      <p>Great overview of the Wasm landscape!</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 Tech Deep Dive</p>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+  </footer>
+
+  <script>window.analytics.track('page_view');</script>
+  <noscript><img src="/track.gif"></noscript>
+</body>
+</html>

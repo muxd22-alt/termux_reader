@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>API Reference: Authentication</title>
+  <link rel="stylesheet" href="/docs.css">
+  <script src="/docs.js"></script>
+</head>
+<body>
+  <header>
+    <nav role="navigation">
+      <a href="/">Docs Home</a>
+      <a href="/api">API Reference</a>
+      <a href="/guides">Guides</a>
+    </nav>
+  </header>
+
+  <div class="toc" id="toc">
+    <h3>Table of Contents</h3>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#oauth">OAuth 2.0</a></li>
+      <li><a href="#api-keys">API Keys</a></li>
+    </ul>
+  </div>
+
+  <main>
+    <article>
+      <h1>Authentication</h1>
+
+      <div class="article-body">
+        <section id="overview">
+          <h2>Overview</h2>
+          <p>Our API supports two authentication methods: OAuth 2.0 for user-level access and API keys for server-to-server communication. All API requests must be authenticated.</p>
+        </section>
+
+        <section id="oauth">
+          <h2>OAuth 2.0</h2>
+          <p>OAuth 2.0 is the recommended authentication method for applications that access resources on behalf of users. We support the Authorization Code flow and the Client Credentials flow.</p>
+
+          <h3>Authorization Code Flow</h3>
+          <p>The authorization code flow is used when your application needs to access the API on behalf of a specific user. The flow involves redirecting the user to our authorization server, obtaining an authorization code, and exchanging it for an access token.</p>
+
+          <pre><code>POST /oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&amp;
+code=AUTH_CODE&amp;
+redirect_uri=https://yourapp.com/callback&amp;
+client_id=YOUR_CLIENT_ID&amp;
+client_secret=YOUR_CLIENT_SECRET</code></pre>
+        </section>
+
+        <section id="api-keys">
+          <h2>API Keys</h2>
+          <p>API keys provide a simpler authentication mechanism for server-to-server integrations. Include your API key in the Authorization header of every request.</p>
+
+          <pre><code>curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://api.example.com/v1/resources</code></pre>
+
+          <table>
+            <thead>
+              <tr><th>Scope</th><th>Description</th><th>Access Level</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>read</td><td>Read-only access</td><td>Basic</td></tr>
+              <tr><td>write</td><td>Read and write access</td><td>Standard</td></tr>
+              <tr><td>admin</td><td>Full administrative access</td><td>Admin</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+
+      <div class="breadcrumb" data-type="navigation">
+        <a href="/">Home</a> &gt; <a href="/api">API</a> &gt; Authentication
+      </div>
+
+      <div class="feedback" data-region="feedback">
+        <p>Was this page helpful?</p>
+        <button>Yes</button>
+        <button>No</button>
+      </div>
+    </article>
+  </main>
+
+  <aside class="sidebar">
+    <div class="section-nav" data-component="sidebar-nav">
+      <h3>API Reference</h3>
+      <ul>
+        <li><a href="/api/auth">Authentication</a></li>
+        <li><a href="/api/users">Users</a></li>
+        <li><a href="/api/resources">Resources</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <footer>
+    <div class="copyright">&copy; 2024 API Docs</div>
+  </footer>
+
+  <script>initSearch();</script>
+</body>
+</html>

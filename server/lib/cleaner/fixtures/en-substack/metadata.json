@@ -1,0 +1,18 @@
+{
+  "name": "en-substack",
+  "url": "https://techdeep.substack.com/p/wasm-2024",
+  "lang": "en",
+  "keySentences": [
+    "WebAssembly (Wasm) has evolved far beyond its original browser-based use case",
+    "WASI provides a standardized set of system calls",
+    "The Wasm Component Model introduces a way to compose Wasm modules",
+    "Docker has integrated Wasm support",
+    "Wasm execution speed is within 10-20% of native code"
+  ],
+  "knownNoise": [
+    "Subscribe to Tech Deep Dive",
+    "Get the latest tech analysis delivered",
+    "Great overview of the Wasm landscape",
+    "window.analytics.track"
+  ]
+}

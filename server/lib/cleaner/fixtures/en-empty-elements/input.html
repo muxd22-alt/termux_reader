@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Kubernetes Guide</title>
+  <meta property="og:image" content="/images/k8s.png">
+  <script>window.analytics={};</script>
+  <style>.clearfix::after { clear:both; }</style>
+</head>
+<body>
+  <nav class="top-nav"><a href="/">Home</a></nav>
+
+  <main class="article-content">
+    <h1>Kubernetes Orchestration Guide</h1>
+
+    <div class="spacer"></div>
+    <div class="clearfix"></div>
+    <div class="separator">   </div>
+
+    <p>Kubernetes orchestrates containerized applications across clusters of machines, providing automated deployment and scaling.</p>
+
+    <div class="empty-wrapper">
+      <div class="inner-empty">
+        <span></span>
+      </div>
+    </div>
+
+    <h2>Pods</h2>
+
+    <div class="decoration"></div>
+    <div>
+      <div></div>
+    </div>
+
+    <p>Pods are the smallest deployable units in Kubernetes. Each pod contains one or more containers that share storage and network resources.</p>
+
+    <div class="image-container">
+      <img src="/images/pod-diagram.png" alt="Pod Architecture">
+    </div>
+
+    <div class="empty-ad-slot">
+      <div class="ad-inner">
+      </div>
+    </div>
+
+    <h2>Services</h2>
+
+    <p>Services provide stable networking for pods. They abstract away pod IP addresses and enable load balancing.</p>
+
+    <pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: web
+  ports:
+    - port: 80</code></pre>
+
+    <hr>
+
+    <div class="whitespace-only">
+
+
+    </div>
+
+    <br>
+
+    <table>
+      <tr><th>Resource</th><th>Purpose</th></tr>
+      <tr><td>Pod</td><td>Run containers</td></tr>
+      <tr><td>Service</td><td>Networking</td></tr>
+    </table>
+
+    <div class="trailing-empty"></div>
+    <div><span> </span></div>
+  </main>
+
+  <aside class="related-sidebar">
+    <h3>Related posts</h3>
+    <ul><li><a href="/docker">Docker basics</a></li></ul>
+  </aside>
+
+  <div class="share-buttons social">
+    <p>Share this article</p>
+    <a href="#" class="tweet-button">Tweet</a>
+  </div>
+
+  <footer><p>© 2024</p></footer>
+  <script>console.log("loaded");</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "en-ars-technica",
+  "url": "https://arstechnica.com/quantum-encryption",
+  "lang": "en",
+  "keySentences": [
+    "the cryptographic algorithms that protect everything",
+    "NIST finalized its first set of post-quantum cryptography standards",
+    "Shor's algorithm, when run on a sufficiently powerful quantum computer",
+    "harvest now, decrypt later",
+    "Migrating existing systems to post-quantum cryptography"
+  ],
+  "knownNoise": [
+    "Subscribe for unlimited access",
+    "Fascinating article!",
+    "tracking"
+  ]
+}

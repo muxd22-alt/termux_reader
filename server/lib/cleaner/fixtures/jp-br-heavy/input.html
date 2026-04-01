@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>TypeScript型システム入門</title>
+  <meta property="og:image" content="/images/ts-types.png">
+  <script>ga('send','pageview');</script>
+  <style>.ad { border:1px solid; }</style>
+</head>
+<body>
+  <header><nav><a href="/">トップ</a></nav></header>
+
+  <div class="entry-content">
+    <h1>TypeScript型システム入門</h1>
+
+    <br><br><br><br><br>
+
+    <p>TypeScriptの型システムは構造的部分型を採用しています。これにより柔軟で安全な型チェックが可能になります。</p>
+
+    <br><br><br><br><br><br>
+
+    <!-- old blog post with excessive line breaks -->
+
+    <h2>ジェネリクス</h2>
+
+    <br><br><br>
+
+    <p>ジェネリクスを使うことで再利用可能なコードを書けるようになります。型パラメータにより関数やクラスを汎用化できます。</p>
+
+    <pre><code>function identity&lt;T&gt;(arg: T): T {
+  return arg;
+}
+
+const result = identity&lt;string&gt;("hello");</code></pre>
+
+    <br><br><br><br><br><br><br><br>
+
+    <h2>条件型</h2>
+
+    <p>条件型は高度な型レベルプログラミングを可能にする強力な機能です。extends キーワードを使って型の分岐を表現します。</p>
+
+    <br><br><br><br>
+
+    <pre><code>type IsString&lt;T&gt; = T extends string ? "yes" : "no";
+type A = IsString&lt;string&gt;;  // "yes"
+type B = IsString&lt;number&gt;;  // "no"</code></pre>
+
+    <br><br><br><br><br>
+  </div>
+
+  <div class="recommend-section sidebar">
+    <h3>おすすめ記事</h3>
+    <ul><li><a href="/react">React入門</a></li></ul>
+  </div>
+
+  <div class="newsletter-signup subscribe">
+    <p>メールマガジン登録</p>
+    <input type="email" placeholder="メールアドレス">
+  </div>
+
+  <footer><p>© 2024 TS Blog</p></footer>
+  <script>trackEvent("article_read");</script>
+</body>
+</html>

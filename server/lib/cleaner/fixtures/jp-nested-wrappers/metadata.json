@@ -1,0 +1,14 @@
+{
+  "name": "jp-nested-wrappers",
+  "url": "https://example.jp/article/nested-divs",
+  "lang": "ja",
+  "keySentences": [
+    "Rustの所有権システムはメモリ安全性を保証する",
+    "借用チェッカーはコンパイル時にエラーを検出する",
+    "ライフタイムは参照の有効期間を指定する"
+  ],
+  "knownNoise": [
+    "人気の記事",
+    "広告スペース"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "en-github-blog",
+  "url": "https://github.blog/2024-04-29-copilot-workspace",
+  "lang": "en",
+  "keySentences": [
+    "GitHub Copilot Workspace, a new developer environment",
+    "starts with a natural language description",
+    "analyzes the issue description, the repository structure",
+    "developer has full control to accept, reject, or modify",
+    "available in technical preview for GitHub Copilot Enterprise"
+  ],
+  "knownNoise": [
+    "analytics.page()"
+  ]
+}

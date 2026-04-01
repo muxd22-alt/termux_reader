@@ -1,0 +1,12 @@
+{
+  "name": "en-personal-blog",
+  "url": "https://example.com/posts/mount-takao",
+  "lang": "en",
+  "keySentences": [
+    "Last weekend I decided to take a break from coding",
+    "The trail starts at the base station",
+    "At the summit, you can see all the way to Mount Fuji",
+    "I highly recommend Mount Takao"
+  ],
+  "knownNoise": []
+}

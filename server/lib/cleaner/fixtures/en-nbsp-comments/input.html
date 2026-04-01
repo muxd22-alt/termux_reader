@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>WebAssembly Deep Dive</title>
+  <meta property="og:image" content="/images/wasm.png">
+  <script>window.__config={env:"prod"};</script>
+  <style>.cookie-banner { position:fixed; }</style>
+</head>
+<body>
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXX"></iframe></noscript>
+  <!-- End Google Tag Manager -->
+
+  <nav class="main-nav"><a href="/">Home</a></nav>
+
+  <!-- Banner ad slot -->
+  <div class="banner-ad" hidden>
+    <p>Advertisement</p>
+  </div>
+
+  <article>
+    <!-- Article header -->
+    <h1>WebAssembly&nbsp;Deep&nbsp;Dive</h1>
+
+    <!-- Author info section -->
+    <!-- Published: 2024-01-15 -->
+    <!-- Category: Web Technologies -->
+
+    <p>WebAssembly&nbsp;enables&nbsp;near-native&nbsp;performance in web browsers. It provides a compilation target for languages like C++, Rust, and Go.</p>
+
+    <!-- Section divider -->
+    <!-- TODO: Add diagram here -->
+
+    <h2>Multi-language&nbsp;Support</h2>
+
+    <p>WASM&nbsp;modules&nbsp;can&nbsp;be&nbsp;compiled&nbsp;from&nbsp;multiple&nbsp;languages, making it a versatile platform. Each language brings its own strengths to the web platform.</p>
+
+    <!-- Code example start -->
+    <pre><code>// Rust to WASM
+#[wasm_bindgen]
+pub fn add(a: i32, b: i32) -&gt; i32 {
+    a&nbsp;+&nbsp;b
+}</code></pre>
+    <!-- Code example end -->
+
+    <!-- Important note about memory -->
+    <h2>Memory&nbsp;Model</h2>
+
+    <p>The&nbsp;linear&nbsp;memory&nbsp;model&nbsp;provides&nbsp;sandboxed&nbsp;execution for WebAssembly modules. Memory is isolated from the host environment.</p>
+
+    <!-- Performance comparison table -->
+    <table>
+      <tr><th>Language</th><th>Relative&nbsp;Speed</th></tr>
+      <tr><td>Native&nbsp;C++</td><td>1.0x</td></tr>
+      <tr><td>WASM</td><td>1.1x</td></tr>
+      <tr><td>JavaScript</td><td>3.5x</td></tr>
+    </table>
+
+    <!-- End of article content -->
+  </article>
+
+  <!-- Cookie consent banner -->
+  <div class="cookie-banner cookie-consent" data-cookie="true">
+    <p>This site uses cookies. By continuing, you agree to our cookie consent policy.</p>
+  </div>
+
+  <!-- Social sharing -->
+  <!-- Facebook SDK -->
+  <!-- Twitter widget -->
+
+  <footer>
+    <!-- Footer navigation -->
+    <p>&copy;&nbsp;2024&nbsp;WebAssembly&nbsp;Blog.&nbsp;All&nbsp;rights&nbsp;reserved.</p>
+    <!-- End footer -->
+  </footer>
+
+  <!-- Analytics -->
+  <script>window.ga("send","pageview");</script>
+  <!-- End Analytics -->
+</body>
+</html>

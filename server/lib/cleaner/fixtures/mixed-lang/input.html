@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta charset="utf-8"><title>React Server Componentsの実践的な使い方</title>
+<script src="/app.js"></script></head>
+<body>
+<header><nav><a href="/">Tech Blog</a></nav></header>
+<main>
+<article>
+  <h1>React Server Componentsの実践的な使い方</h1>
+  <div class="post-meta"><span class="author">Taro Yamada</span><time>2024-03-15</time></div>
+  <div class="post-content">
+    <p>React Server Components（RSC）は、Reactのアーキテクチャに大きな変革をもたらしました。この記事では、Next.js App Routerを使った実践的なRSCの活用方法を解説します。</p>
+    <h2>Server Components vs Client Components</h2>
+    <p>Server Componentsはサーバー側でのみレンダリングされ、JavaScriptバンドルに含まれません。一方、Client Componentsはブラウザで実行され、インタラクティビティを提供します。use clientディレクティブで明示的に区別します。</p>
+    <pre><code>// Server Component (default in App Router)
+async function UserProfile({ userId }: { userId: string }) {
+  const user = await db.user.findUnique({ where: { id: userId } })
+  return &lt;div&gt;{user.name}&lt;/div&gt;
+}
+
+// Client Component
+'use client'
+function LikeButton() {
+  const [liked, setLiked] = useState(false)
+  return &lt;button onClick={() =&gt; setLiked(!liked)}&gt;Like&lt;/button&gt;
+}</code></pre>
+    <h2>Data Fetching パターン</h2>
+    <p>RSCの最大のメリットは、コンポーネント内で直接データベースクエリやAPI呼び出しを行えることです。これにより、waterfall問題を解消し、必要なデータを効率的に取得できます。</p>
+    <h2>Streaming と Suspense</h2>
+    <p>Server ComponentsはReact Suspenseと組み合わせることで、段階的なストリーミングレンダリングを実現できます。遅いデータフェッチがあっても、準備ができた部分から順にクライアントに送信されます。</p>
+    <p>RSCはまだ進化の途中ですが、適切に使えばユーザー体験とDeveloper Experienceの両方を大幅に改善できるパラダイムです。</p>
+  </div>
+  <div class="share-icons"><a href="#">Twitter</a><a href="#">Facebook</a></div>
+  <div class="tags"><a href="/tag/react">React</a><a href="/tag/nextjs">Next.js</a></div>
+</article>
+</main>
+<aside class="sidebar"><div class="sidebar-item trending"><h3>トレンド記事</h3><ul><li><a href="/1">Vue 4の新機能</a></li></ul></div></aside>
+<footer><p>&copy; 2024 Tech Blog</p></footer>
+<script>ga('send', 'pageview');</script>
+</body>
+</html>

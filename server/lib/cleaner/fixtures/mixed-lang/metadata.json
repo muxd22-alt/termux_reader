@@ -1,0 +1,15 @@
+{
+  "name": "mixed-lang",
+  "url": "https://example.com/blog/react-server-components",
+  "lang": "ja",
+  "keySentences": [
+    "React Server Components（RSC）は、Reactのアーキテクチャに大きな変革",
+    "Server Componentsはサーバー側でのみレンダリングされ",
+    "コンポーネント内で直接データベースクエリやAPI呼び出しを行える",
+    "段階的なストリーミングレンダリングを実現",
+    "ユーザー体験とDeveloper Experienceの両方を大幅に改善"
+  ],
+  "knownNoise": [
+    "ga('send', 'pageview')"
+  ]
+}

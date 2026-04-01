@@ -1,0 +1,17 @@
+{
+  "name": "jp-blog",
+  "url": "https://example.com/blog/typescript-types",
+  "lang": "ja",
+  "keySentences": [
+    "TypeScriptの型システムは非常に強力で",
+    "ジェネリクスを使うことで、型安全性を保ちながら",
+    "条件型（Conditional Types）は、型レベルでの条件分岐を可能にします",
+    "テンプレートリテラル型は、文字列リテラル型をテンプレートとして使用できる"
+  ],
+  "knownNoise": [
+    "window.ga('send', 'pageview')",
+    "advertisement banner",
+    "Hidden tracking div",
+    "プライバシーポリシー"
+  ]
+}

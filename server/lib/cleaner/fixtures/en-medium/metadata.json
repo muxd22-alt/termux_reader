@@ -1,0 +1,21 @@
+{
+  "name": "en-medium",
+  "url": "https://medium.com/rust-future-systems",
+  "lang": "en",
+  "keySentences": [
+    "Rust has been gaining tremendous momentum",
+    "Rust guarantees memory safety at compile time",
+    "The borrow checker is Rust's most distinctive feature",
+    "Rust's type system and ownership model make it possible",
+    "Major companies are adopting Rust for critical infrastructure"
+  ],
+  "knownNoise": [
+    "Get unlimited access",
+    "tracking element",
+    "More from John Doe"
+  ],
+  "knownNoiseRequiresScoring": [
+    "Like this article? Follow me",
+    "Recommended from Medium"
+  ]
+}

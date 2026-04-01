@@ -1,0 +1,14 @@
+{
+  "name": "en-empty-elements",
+  "url": "https://example.com/blog/empty-divs",
+  "lang": "en",
+  "keySentences": [
+    "Kubernetes orchestrates containerized applications",
+    "Pods are the smallest deployable units",
+    "Services provide stable networking"
+  ],
+  "knownNoise": [
+    "Related posts",
+    "Share this article"
+  ]
+}

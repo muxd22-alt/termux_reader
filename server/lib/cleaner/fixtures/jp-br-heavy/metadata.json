@@ -1,0 +1,14 @@
+{
+  "name": "jp-br-heavy",
+  "url": "https://example.jp/blog/excessive-br",
+  "lang": "ja",
+  "keySentences": [
+    "TypeScriptの型システムは構造的部分型を採用しています",
+    "ジェネリクスを使うことで再利用可能なコードを書ける",
+    "条件型は高度な型レベルプログラミングを可能にする"
+  ],
+  "knownNoise": [
+    "おすすめ記事",
+    "メールマガジン登録"
+  ]
+}

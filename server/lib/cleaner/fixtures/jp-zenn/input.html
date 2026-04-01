@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Dockerマルチステージビルドの実践ガイド</title>
+  <script src="/runtime.js"></script>
+  <style>.znc { max-width: 800px; }</style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/">Zenn</a>
+      <a href="/topics">トピック</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h1>Dockerマルチステージビルドの実践ガイド</h1>
+      <div class="article-meta">
+        <div class="author">
+          <img src="/avatars/dev.jpg" class="avatar" alt="dev_user">
+          <a href="/users/dev_user" class="author-name">dev_user</a>
+        </div>
+        <time class="pub-date">2024-03-10</time>
+        <span class="reading-time">10分で読める</span>
+      </div>
+
+      <div class="article-body znc">
+        <p>Dockerのマルチステージビルドは、最終的なイメージサイズを大幅に削減するための重要なテクニックです。この記事では、実際のプロジェクトでマルチステージビルドを活用する方法を解説します。</p>
+
+        <h2>なぜマルチステージビルドが必要なのか</h2>
+        <p>シングルステージビルドでは、ビルドツールやコンパイラがイメージに含まれてしまい、最終イメージが不必要に大きくなります。マルチステージビルドでは、ビルド用のステージと実行用のステージを分離することで、この問題を解決します。</p>
+
+        <pre><code># Build stage
+FROM golang:1.22 AS builder
+WORKDIR /app
+COPY . .
+RUN go build -o server .
+
+# Runtime stage
+FROM alpine:3.19
+COPY --from=builder /app/server /usr/local/bin/
+CMD ["server"]</code></pre>
+
+        <h2>Go アプリケーションの例</h2>
+        <p>Goアプリケーションは静的リンクされたバイナリを生成できるため、マルチステージビルドとの相性が非常に良いです。ビルドステージでコンパイルし、実行ステージでは軽量なalpineイメージにバイナリだけをコピーします。</p>
+
+        <h2>Node.js アプリケーションの例</h2>
+        <p>Node.jsの場合は、ビルドステージでnpm ciとビルドを実行し、実行ステージではproduction dependenciesのみをインストールします。これにより、devDependenciesやビルドキャッシュを除外できます。</p>
+
+        <h2>ベストプラクティス</h2>
+        <p>.dockerignoreファイルを適切に設定し、node_modulesやテストファイルをビルドコンテキストから除外することも重要です。また、キャッシュを活用するためにCOPYの順序にも注意が必要です。</p>
+      </div>
+
+      <div class="article-tags" data-section="tags">
+        <a href="/topics/docker">Docker</a>
+        <a href="/topics/devops">DevOps</a>
+        <a href="/topics/container">コンテナ</a>
+      </div>
+
+      <div class="like-button" data-widget="like">
+        <button>いいね</button>
+        <span>42</span>
+      </div>
+    </article>
+  </main>
+
+  <aside class="sidebar">
+    <div class="sidebar-item trending">
+      <h3>トレンド</h3>
+      <ul>
+        <li><a href="/articles/1">Kubernetes入門</a></li>
+        <li><a href="/articles/2">GitHub Actions活用術</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <div id="comments">
+    <h3>コメント</h3>
+    <div class="comment-content">
+      <p>とても参考になりました！</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 Zenn</p>
+  </footer>
+
+  <script>window.__NEXT_DATA__ = {};</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta charset="utf-8"><title>Goの並行処理パターン</title>
+<script src="/js/app.js"></script><style>.entry { max-width: 700px; }</style></head>
+<body>
+<header id="header"><nav><a href="/">はてなブログ</a></nav></header>
+<main>
+<article>
+  <h1 class="entry-title">Goの並行処理パターン</h1>
+  <div class="entry-meta"><span class="author">go_dev</span><time class="date">2024-04-01</time></div>
+  <div class="entry-content">
+    <p>Go言語の最大の特徴の一つは、goroutineとchannelによる並行処理モデルです。この記事では、実務でよく使われる並行処理パターンを紹介します。</p>
+    <h2>Fan-Out / Fan-In パターン</h2>
+    <p>Fan-Outは一つのチャネルからの入力を複数のgoroutineに分散させるパターンです。Fan-Inはその逆で、複数のチャネルからの出力を一つのチャネルに集約します。このパターンはCPUバウンドな処理の並列化に特に有効です。</p>
+    <h2>Worker Pool パターン</h2>
+    <p>Worker Poolパターンは、固定数のgoroutineが共有のジョブキューからタスクを取り出して処理するパターンです。リソースの使用量を制御しながら並行処理を行うことができます。</p>
+    <pre><code>func worker(id int, jobs &lt;-chan int, results chan&lt;- int) {
+    for j := range jobs {
+        results &lt;- j * 2
+    }
+}</code></pre>
+    <h2>Context によるキャンセレーション</h2>
+    <p>Go 1.7で導入されたcontextパッケージは、goroutine間のキャンセレーション伝播とデッドライン管理を提供します。長時間実行されるgoroutineは必ずcontextを受け取り、Done()チャネルを監視すべきです。</p>
+    <p>これらのパターンを適切に組み合わせることで、堅牢でスケーラブルな並行処理システムを構築できます。重要なのは、共有メモリではなくチャネルによるコミュニケーションを優先することです。</p>
+  </div>
+  <div class="entry-footer">
+    <div class="social-shar"><a href="#">はてブ</a><a href="#">Twitter</a></div>
+    <div class="tags"><a href="/tag/Go">Go</a><a href="/tag/concurrency">並行処理</a></div>
+  </div>
+</article>
+</main>
+<aside class="sidebar">
+  <div class="sidebar-item"><h3>読者になる</h3><button>登録する</button></div>
+  <div class="sidebar-item recent-articles"><h3>最近の記事</h3>
+    <ul><li><a href="/1">Rust入門</a></li><li><a href="/2">Docker活用術</a></li></ul>
+  </div>
+</aside>
+<div id="comments"><h3>コメント</h3><p>とても勉強になりました！</p></div>
+<footer><p>&copy; 2024 はてなブログ</p></footer>
+<script>hatena.bookmark.init();</script>
+</body>
+</html>

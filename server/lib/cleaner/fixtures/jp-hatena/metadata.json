@@ -1,0 +1,17 @@
+{
+  "name": "jp-hatena",
+  "url": "https://example.hatenablog.com/entry/go-concurrency",
+  "lang": "ja",
+  "keySentences": [
+    "goroutineとchannelによる並行処理モデル",
+    "Fan-Outは一つのチャネルからの入力を複数のgoroutineに分散",
+    "Worker Poolパターンは、固定数のgoroutineが共有のジョブキュー",
+    "contextパッケージは、goroutine間のキャンセレーション伝播",
+    "共有メモリではなくチャネルによるコミュニケーションを優先"
+  ],
+  "knownNoise": [
+    "hatena.bookmark.init()",
+    "読者になる",
+    "とても勉強になりました"
+  ]
+}

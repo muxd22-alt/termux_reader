@@ -1,0 +1,16 @@
+{
+  "name": "en-docs",
+  "url": "https://docs.example.com/api/auth",
+  "lang": "en",
+  "keySentences": [
+    "Our API supports two authentication methods",
+    "OAuth 2.0 is the recommended authentication method",
+    "The authorization code flow is used when your application",
+    "API keys provide a simpler authentication mechanism",
+    "Read-only access"
+  ],
+  "knownNoise": [
+    "Was this page helpful?",
+    "initSearch()"
+  ]
+}

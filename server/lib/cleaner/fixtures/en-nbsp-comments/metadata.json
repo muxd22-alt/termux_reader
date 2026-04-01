@@ -1,0 +1,14 @@
+{
+  "name": "en-nbsp-comments",
+  "url": "https://example.com/blog/nbsp-comments",
+  "lang": "en",
+  "keySentences": [
+    "WebAssembly enables near-native performance",
+    "WASM modules can be compiled from multiple languages",
+    "The linear memory model provides sandboxed execution"
+  ],
+  "knownNoise": [
+    "Advertisement",
+    "cookie consent"
+  ]
+}

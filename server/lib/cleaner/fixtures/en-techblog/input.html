@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Building Scalable Microservices with Go</title>
+  <link rel="stylesheet" href="/theme.css">
+  <script src="https://www.googletagmanager.com/gtm.js"></script>
+  <style>.code-block { background: #f5f5f5; }</style>
+</head>
+<body>
+  <header>
+    <nav role="navigation">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/about">About</a>
+    </nav>
+  </header>
+
+  <div class="promo" data-component="hero-banner">
+    <p>Subscribe to our premium content!</p>
+  </div>
+
+  <main>
+    <article>
+      <h1>Building Scalable Microservices with Go</h1>
+      <div class="byline">
+        <span class="author">Jane Smith</span>
+        <time>March 15, 2024</time>
+      </div>
+
+      <div class="post-content">
+        <p>Microservices architecture has become the de facto standard for building large-scale distributed systems. Go, with its excellent concurrency support and small memory footprint, is an ideal choice for microservices.</p>
+
+        <h2>Service Discovery</h2>
+        <p>In a microservices architecture, service discovery is crucial. Services need to find and communicate with each other dynamically. Popular solutions include Consul, etcd, and Kubernetes service discovery.</p>
+
+        <h2>Inter-Service Communication</h2>
+        <p>gRPC is widely used for inter-service communication due to its efficiency and strong typing. Protocol Buffers provide a language-neutral way to define service interfaces.</p>
+
+        <pre><code>func main() {
+    srv := grpc.NewServer()
+    pb.RegisterUserServiceServer(srv, &amp;userService{})
+    srv.Serve(lis)
+}</code></pre>
+
+        <h2>Observability</h2>
+        <p>Distributed tracing with OpenTelemetry, structured logging, and Prometheus metrics are essential for operating microservices in production. Without proper observability, debugging issues across services becomes extremely difficult.</p>
+      </div>
+    </article>
+  </main>
+
+  <aside class="sidebar">
+    <div class="subscribe widget">
+      <h3>Newsletter</h3>
+      <form><input type="email"><button>Subscribe</button></form>
+    </div>
+  </aside>
+
+  <div id="comments">
+    <h3>Comments (12)</h3>
+    <div class="comment-thread">
+      <p>Great article!</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 Tech Blog</p>
+    <a href="/privacy">Privacy Policy</a>
+  </footer>
+
+  <script>window.dataLayer = window.dataLayer || [];</script>
+  <noscript><img src="/pixel.gif" style="display:none"></noscript>
+  <div hidden aria-hidden="true">hidden element</div>
+</body>
+</html>

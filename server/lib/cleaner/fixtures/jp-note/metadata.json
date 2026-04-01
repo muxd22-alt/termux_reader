@@ -1,0 +1,15 @@
+{
+  "name": "jp-note",
+  "url": "https://note.com/tech_writer/n/tech-writing",
+  "lang": "ja",
+  "keySentences": [
+    "技術文書を書くスキルは、エンジニアにとってコードを書くスキル",
+    "読者を明確に定義すること",
+    "技術文書は論理的な構造を持つべき",
+    "コード例は最小限かつ完全であるべき",
+    "より伝わりやすい技術コンテンツを作成できる"
+  ],
+  "knownNoise": [
+    "note.analytics.track()"
+  ]
+}
