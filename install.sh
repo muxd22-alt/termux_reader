@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # ============================================================================
 #  Oksskolten Termux Reader — Native Android (NDK) Installer
-#  The "Final Solution" for Native Dependency Loading
+#  ELF Binary Cleaner for Termux Compatibility
 # ============================================================================
 set -uo pipefail
 
@@ -25,8 +25,8 @@ warn() { echo -e "  ${Y}[!]${NC} $1"; }
 banner
 
 # --- 1. System Packages ---
-step "Ensuring native dependencies..."
-pkg install -y nodejs-lts git curl python make clang binutils pkg-config libsqlite openssl 2>/dev/null || true
+step "Ensuring native dependencies & ELF cleaner..."
+pkg install -y nodejs-lts git curl python make clang binutils pkg-config libsqlite openssl termux-elf-cleaner 2>/dev/null || true
 ok "Packages checked"
 
 # --- 2. Clone/Update ---
@@ -39,7 +39,7 @@ else
 fi
 ok "Source ready"
 
-# --- 3. Strip platform locks ---
+# --- 3. Patch configs ---
 step "Applying compatibility patch..."
 find . -maxdepth 1 -name "package*.json" -exec sed -i 's/"os": \[/"os": \["android", /g' {} +
 find . -maxdepth 1 -name "package*.json" -exec sed -i 's/"cpu": \[/"cpu": \["arm64", /g' {} +
@@ -56,16 +56,10 @@ npm install --force --no-fund --no-audit --build-from-source 2>&1 | tail -n 20 |
 npm install --force @libsql/linux-arm64-gnu --no-save --no-fund --no-audit || true
 ok "Dependencies installed"
 
-# --- 5. The "Runtime Intercept" Patch (The Magic Fix) ---
-step "Injecting runtime module override for Termux..."
-
-# We insert a module redirect at the very top of server/index.ts
-# This tricks Node.js into loading the linux binary when it asks for the android one.
+# --- 5. The "Runtime Intercept" Patch (Bypassing module names) ---
+step "Patching runtime module loader..."
 PATCH_FILE="server/index.ts"
-if grep -q "Module.prototype.require" "$PATCH_FILE"; then
-    ok "Runtime patch already present"
-else
-    # Create temp file with patch
+if ! grep -q "Module.prototype.require" "$PATCH_FILE"; then
     cat > patch_temp.ts << 'EOF'
 import Module from 'node:module';
 // @ts-ignore
@@ -79,26 +73,30 @@ Module.prototype.require = function(id) {
 };
 
 EOF
-    cat "$PATCH_FILE" >> patch_temp.ts
-    mv patch_temp.ts "$PATCH_FILE"
-    ok "Runtime loader patch injected into server/index.ts"
+    cat "$PATCH_FILE" >> patch_temp.ts && mv patch_temp.ts "$PATCH_FILE"
 fi
+ok "Runtime loader patch active"
 
-# --- 6. The "Nuclear Dir" Fix ---
-step "Ensuring native bindings are physically present..."
+# --- 6. The ELF Fix (CRITICAL) ---
+step "Cleaning native binaries for Android/Termux environment..."
+# LibSQL expects '@libsql/android-arm64'
 mkdir -p node_modules/@libsql
 if [ -d "node_modules/@libsql/linux-arm64-gnu" ]; then
     rm -rf "node_modules/@libsql/android-arm64"
     cp -r "node_modules/@libsql/linux-arm64-gnu" "node_modules/@libsql/android-arm64"
-    ok "Binding duplicated (@libsql/linux-arm64-gnu -> @libsql/android-arm64)"
+    
+    # Fix the shared library dependencies (remove libdl.so.2 dependency)
+    echo -e "  ${DIM}Elf-cleaning native binaries...${NC}"
+    find node_modules/@libsql -name "*.node" -exec termux-elf-cleaner --quiet {} +
+    ok "Native binaries cleaned and ready"
 else
-    warn "Native linux binding not found! Attempting manual copy from system..."
+    warn "Native binding folder not found!"
 fi
 
 # --- 7. Build ---
-step "Building frontend (this can take a moment)..."
+step "Building frontend..."
 npm run build 2>&1 | tail -n 5 || true
-ok "Build complete"
+ok "Build finished"
 
 # --- 8. Final Reader Command ---
 mkdir -p "$PREFIX/bin"
@@ -107,13 +105,9 @@ cat > "$PREFIX/bin/reader" << 'READEREOF'
 R='\033[0;31m' G='\033[0;32m' Y='\033[1;33m' C='\033[0;36m' B='\033[1;34m' M='\033[0;35m' W='\033[1;37m' NC='\033[0m'
 APP_DIR="$HOME/oksskolten"
 PORT="${READER_PORT:-3000}"
-
-# Robust IP detection
 LOCAL_IP=$(hostname -I 2>/dev/null | cut -d' ' -f1)
 [ -z "$LOCAL_IP" ] && LOCAL_IP=$(ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)[\d.]+' | grep -v '127\.0\.0\.1' | head -1)
-[ -z "$LOCAL_IP" ] && LOCAL_IP=$(ifconfig 2>/dev/null | grep -oP '(?<=inet\s)[\d.]+' | grep -v '127\.0\.0\.1' | head -1)
 [ -z "$LOCAL_IP" ] && LOCAL_IP="127.0.0.1"
-
 TS_IP=$(command -v tailscale &>/dev/null && tailscale ip -4 2>/dev/null || echo "")
 
 clear
