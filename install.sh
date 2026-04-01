@@ -28,11 +28,11 @@ fail() { echo -e "  ${R}[✗]${NC} $1"; exit 1; }
 
 banner
 
-# --- 1. Core packages (all NDK-native, no proot) ---
+# --- 1. Core packages ---
 step "Installing native Termux packages..."
 yes | pkg update -y 2>/dev/null || pkg update -y
 pkg install -y \
-  nodejs \
+  nodejs-lts \
   git \
   curl \
   python \
@@ -45,7 +45,7 @@ pkg install -y \
   2>/dev/null || true
 ok "Native packages installed ($(node -v), npm $(npm -v))"
 
-# NDK build environment for native modules
+# NDK build environment
 export CC=clang
 export CXX=clang++
 export npm_config_nodedir="$PREFIX"
@@ -62,15 +62,8 @@ if command -v tailscale &>/dev/null; then
     nohup tailscaled --tun=userspace-networking --socks5-server=localhost:1055 &>/dev/null &
     sleep 2
   fi
-  if tailscale status &>/dev/null 2>&1; then
-    ok "Tailscale connected: $(tailscale ip -4 2>/dev/null)"
-  else
-    warn "Run ${C}tailscale up${NC} after install to authenticate"
-  fi
 else
-  warn "Tailscale not installed. Install it separately:"
-  echo -e "    ${C}pkg install tailscale${NC}  (if available)"
-  echo -e "    ${C}or see: https://tailscale.com/download/linux${NC}"
+  warn "Tailscale not installed (recommended for remote access)"
 fi
 
 # --- 3. Clone / Update ---
@@ -88,30 +81,42 @@ else
   ok "Repository cloned"
 fi
 
-# --- 4. Install deps ---
-# Key fix: Termux reports os=android but many npm packages only list
-# os:[darwin,linux,win32]. We override with --os=linux to bypass this.
-step "Installing Node.js dependencies..."
-cd "$INSTALL_DIR"
+# --- 4. Bypass NPM restrictions ---
+step "Pre-configuring NPM for Termux compatibility..."
+# Remove 'engines' and other strict fields that cause failures in Termux
+sed -i '/"engines": {/,/}/d' package.json || true
+# Some packages (like libsql) hardcode OS. We'll use --force to bypass.
 
-npm install --os=linux --cpu=arm64 --build-from-source 2>&1 | tail -10
+# --- 5. Install deps ---
+step "Installing Node.js dependencies (this may take a few mins)..."
+# Setting these env vars is more effective than flags for some native modules
+export npm_config_os=linux
+export npm_config_cpu=arm64
+export npm_config_platform=linux
+
+# Use --force to bypass EBADPLATFORM errors for Android
+# Use --ignore-scripts first if native build fails, but let's try full install first
+npm install --force --build-from-source 2>&1 | tail -n 15 || {
+  warn "Native build failed, attempting fallback installation..."
+  npm install --force --ignore-scripts
+}
 ok "Dependencies installed"
 
-# --- 5. Build frontend ---
+# --- 6. Build frontend ---
 step "Building production frontend..."
-npm run build 2>&1 | tail -5 || {
-  warn "Production build failed — will fall back to dev mode at runtime"
+npm run build 2>&1 | tail -n 5 || {
+  warn "Production build failed — app will run in developer mode"
 }
 ok "Build step complete"
 
-# Prune devDependencies to save space
-npm prune --omit=dev --os=linux --cpu=arm64 2>/dev/null || true
-
-# --- 6. Create data directory ---
+# --- 7. Create data directory ---
 mkdir -p "$INSTALL_DIR/data"
 
-# --- 7. Create the 'reader' one-word command ---
+# --- 8. Create the 'reader' one-word command ---
 step "Creating 'reader' command..."
+
+# Create the bin dir if it doesn't exist
+mkdir -p "$PREFIX/bin"
 
 cat > "$PREFIX/bin/reader" << 'READEREOF'
 #!/data/data/com.termux/files/usr/bin/bash
@@ -125,67 +130,46 @@ APP_DIR="$HOME/oksskolten"
 PORT="${READER_PORT:-3000}"
 
 if [ ! -d "$APP_DIR" ]; then
-  echo -e "${R}Error: $APP_DIR not found. Run the installer first:${NC}"
-  echo -e "${C}curl -fsSL https://raw.githubusercontent.com/muxd22-alt/termux_reader/main/install.sh | bash${NC}"
+  echo -e "${R}Error: $APP_DIR not found. Run the installer first.${NC}"
   exit 1
 fi
 
-# --- Ensure tailscaled is running ---
+# Start tailscaled if present
 if command -v tailscaled &>/dev/null && ! pgrep -x tailscaled &>/dev/null; then
   nohup tailscaled --tun=userspace-networking --socks5-server=localhost:1055 &>/dev/null &
-  sleep 2
+  sleep 1
 fi
 
-# --- Gather IPs ---
-LOCAL_IP=$(ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)[\d.]+' | grep -v '127\.0\.0\.1' | head -1)
-LOCAL_IP="${LOCAL_IP:-127.0.0.1}"
+LOCAL_IP=$(ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)[\d.]+' | grep -v '127\.0\.0\.1' | head -1 || echo "127.0.0.1")
+TS_IP=$(command -v tailscale &>/dev/null && tailscale ip -4 2>/dev/null || echo "")
 
-TS_IP=""
-if command -v tailscale &>/dev/null; then
-  TS_IP=$(tailscale ip -4 2>/dev/null || true)
-fi
-
-# --- Display ---
 clear
 echo ""
 echo -e "  ${W}╔═══════════════════════════════════════════════════╗${NC}"
 echo -e "  ${W}║${NC}                                                   ${W}║${NC}"
-echo -e "  ${W}║${NC}   ${G}📖  Oksskolten RSS Reader${NC}                      ${W}║${NC}"
-echo -e "  ${W}║${NC}   ${DIM}Native Android · Tailscale Ready${NC}                ${W}║${NC}"
+echo -e "  ${W}║${NC}   ${G}📖 Oksskolten RSS Reader${NC}                        ${W}║${NC}"
+echo -e "  ${W}║${NC}   ${DIM}Native Android · Zero Overhead${NC}                  ${W}║${NC}"
 echo -e "  ${W}║${NC}                                                   ${W}║${NC}"
 echo -e "  ${W}╠═══════════════════════════════════════════════════╣${NC}"
 echo -e "  ${W}║${NC}                                                   ${W}║${NC}"
 echo -e "  ${W}║${NC}   ${B}Local:${NC}      http://${LOCAL_IP}:${PORT}"
-echo -e "  ${W}║${NC}"
 
 if [ -n "$TS_IP" ]; then
 echo -e "  ${W}║${NC}   ${C}Tailscale:${NC}  ${W}http://${TS_IP}:${PORT}${NC}  ${M}◀ anywhere${NC}"
-else
-echo -e "  ${W}║${NC}   ${Y}Tailscale:${NC}  not connected"
-echo -e "  ${W}║${NC}   ${DIM}Run: tailscale up${NC}"
 fi
 
 echo -e "  ${W}║${NC}"
 echo -e "  ${W}╚═══════════════════════════════════════════════════╝${NC}"
 echo ""
-echo -e "  ${DIM}Ctrl+C to stop${NC}"
-echo ""
 
-# --- Start server ---
 cd "$APP_DIR"
-
 export PORT="$PORT"
 export DATA_DIR="${DATA_DIR:-$APP_DIR/data}"
-export CC=clang
-export CXX=clang++
-
-mkdir -p "$DATA_DIR"
 
 if [ -d "$APP_DIR/dist" ]; then
   export NODE_ENV=production
   exec npx tsx --dns-result-order=ipv4first server/index.ts
 else
-  echo -e "  ${Y}No build found — running in dev mode...${NC}\n"
   export NODE_ENV=development
   export AUTH_DISABLED=1
   exec npx tsx --dns-result-order=ipv4first server/index.ts
@@ -193,15 +177,9 @@ fi
 READEREOF
 
 chmod +x "$PREFIX/bin/reader"
-ok "'reader' command installed at $PREFIX/bin/reader"
+ok "'reader' command installed"
 
 # --- Done ---
 echo ""
-echo -e "${G}  ╔═══════════════════════════════════════════════╗${NC}"
-echo -e "${G}  ║          ✅  Installation Complete!           ║${NC}"
-echo -e "${G}  ╠═══════════════════════════════════════════════╣${NC}"
-echo -e "${G}  ║${NC}                                               ${G}║${NC}"
-echo -e "${G}  ║${NC}   Type ${C}reader${NC} to start                       ${G}║${NC}"
-echo -e "${G}  ║${NC}                                               ${G}║${NC}"
-echo -e "${G}  ╚═══════════════════════════════════════════════╝${NC}"
+echo -e "${G}  ✅  Done! Type ${C}reader${G} to start.${NC}"
 echo ""
