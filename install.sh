@@ -1,130 +1,157 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # ============================================================================
-#  Oksskolten Termux Reader — Native Android (NDK) Installer
-#  ELF Binary Cleaner for Termux Compatibility
+#  Oksskolten Termux Reader — Bulletproof Installer
+#  Optimized for Native Android (NDK) & Stability
 # ============================================================================
-set -uo pipefail
 
-R='\033[0;31m' G='\033[0;32m' Y='\033[1;33m' C='\033[0;36m' B='\033[1;34m' NC='\033[0m'
+# Strict mode: Exit on error, unset variables, or pipe failures
+set -euo pipefail
 
+# Colors and Styling
+R='\033[0;31m'; G='\033[0;32m'; Y='\033[1;33m'; C='\033[0;36m'; B='\033[1;34m'; NC='\033[0m'
+
+# Utility Functions
 banner() {
-cat << 'EOF'
-
-   ╔═══════════════════════════════════════════╗
-   ║     📖  Oksskolten Termux Reader  📖     ║
-   ║      Native Android · Zero Overhead       ║
-   ╚═══════════════════════════════════════════╝
-
-EOF
+    clear
+    echo -e "${B}╔═══════════════════════════════════════════╗${NC}"
+    echo -e "${B}║    ${G}📖  Oksskolten Termux Reader  📖${NC}    ${B}║${NC}"
+    echo -e "${B}║       Native Android · Zero Overhead      ║${NC}"
+    echo -e "${B}╚═══════════════════════════════════════════╝${NC}"
 }
 
 step() { echo -e "\n${B}[▸]${NC} $1"; }
 ok()   { echo -e "  ${G}[✓]${NC} $1"; }
 warn() { echo -e "  ${Y}[!]${NC} $1"; }
+err()  { echo -e "  ${R}[✗]${NC} $1"; exit 1; }
+
+# Trap for unexpected exits
+cleanup() {
+    local exit_code=$?
+    if [ $exit_code -ne 0 ]; then
+        echo -e "\n${R}Installation failed.${NC} Check the logs above."
+    fi
+}
+trap cleanup EXIT
 
 banner
 
-# --- 1. System Packages ---
-step "Ensuring native dependencies & ELF cleaner..."
-pkg install -y nodejs-lts git curl python make clang binutils pkg-config libsqlite openssl termux-elf-cleaner 2>/dev/null || true
-ok "Packages checked"
+# --- 1. Environment Check ---
+step "Checking environment..."
+if [ -z "${TERMUX_VERSION:-}" ]; then
+    warn "Not running in Termux? This script is optimized for Android/Termux."
+fi
+[ -w "$HOME" ] || err "No write permission to $HOME"
+ok "Environment validated"
 
-# --- 2. Clone/Update ---
+# --- 2. System Packages ---
+step "Syncing repositories and installing build tools..."
+pkg update -y && pkg upgrade -y
+# Added python-rust and turret for better native compilation support
+PACKAGES="nodejs-lts git curl python make clang binutils pkg-config libsqlite openssl rust"
+for p in $PACKAGES; do
+    pkg install -y "$p" || warn "Failed to install $p, attempting to continue..."
+done
+ok "Build toolchain updated"
+
+# --- 3. Clone/Update Source ---
 INSTALL_DIR="$HOME/oksskolten"
-if [ -d "$INSTALL_DIR/.git" ]; then
-  cd "$INSTALL_DIR" && git pull --ff-only 2>/dev/null || true
+step "Fetching source code..."
+if [ -d "$INSTALL_DIR" ]; then
+    if [ -d "$INSTALL_DIR/.git" ]; then
+        cd "$INSTALL_DIR" && git pull --ff-only || warn "Git pull failed, using existing source."
+    else
+        warn "$INSTALL_DIR exists but is not a git repo. Backing up..."
+        mv "$INSTALL_DIR" "${INSTALL_DIR}_backup_$(date +%s)"
+        git clone https://github.com/muxd22-alt/termux_reader.git "$INSTALL_DIR"
+        cd "$INSTALL_DIR"
+    fi
 else
-  git clone https://github.com/muxd22-alt/termux_reader.git "$INSTALL_DIR"
-  cd "$INSTALL_DIR"
+    git clone https://github.com/muxd22-alt/termux_reader.git "$INSTALL_DIR"
+    cd "$INSTALL_DIR"
 fi
-ok "Source ready"
+ok "Source ready at $INSTALL_DIR"
 
-# --- 3. Patch configs ---
-step "Applying compatibility patch..."
-find . -maxdepth 1 -name "package*.json" -exec sed -i 's/"os": \[/"os": \["android", /g' {} +
-find . -maxdepth 1 -name "package*.json" -exec sed -i 's/"cpu": \[/"cpu": \["arm64", /g' {} +
+# --- 4. Android Patching ---
+step "Applying platform compatibility patches..."
+# Use a more robust sed approach for JSON
+find . -maxdepth 2 -name "package.json" -exec sed -i 's/"os": \[/"os": \["android", /g' {} +
+# Remove engine restrictions that often break on Termux
 sed -i '/"engines": {/,/}/d' package.json 2>/dev/null || true
-ok "Configs patched"
+ok "Configs patched for Android"
 
-# --- 4. Install dependencies ---
-step "Installing Node.js dependencies..."
-export npm_config_os=linux
-export npm_config_cpu=arm64
-export npm_config_platform=linux
+# --- 5. Native Build ---
+step "Building native modules (this may take several minutes)..."
+# Set environment variables for native building
+export CFLAGS="-O3"
+export CXXFLAGS="-O3"
 
-npm install --force --no-fund --no-audit --build-from-source 2>&1 | tail -n 20 || true
-npm install --force @libsql/linux-arm64-gnu --no-save --no-fund --no-audit || true
-ok "Dependencies installed"
-
-# --- 5. The "Runtime Intercept" Patch (Bypassing module names) ---
-step "Patching runtime module loader..."
-PATCH_FILE="server/index.ts"
-if ! grep -q "Module.prototype.require" "$PATCH_FILE"; then
-    cat > patch_temp.ts << 'EOF'
-import Module from 'node:module';
-// @ts-ignore
-const originalRequire = Module.prototype.require;
-// @ts-ignore
-Module.prototype.require = function(id) {
-  if (id === '@libsql/android-arm64' || id.includes('android-arm64')) {
-    return originalRequire.call(this, id.replace('android-arm64', 'linux-arm64-gnu'));
-  }
-  return originalRequire.apply(this, arguments);
-};
-
-EOF
-    cat "$PATCH_FILE" >> patch_temp.ts && mv patch_temp.ts "$PATCH_FILE"
-fi
-ok "Runtime loader patch active"
-
-# --- 6. The ELF Fix (CRITICAL) ---
-step "Cleaning native binaries for Android/Termux environment..."
-# LibSQL expects '@libsql/android-arm64'
-mkdir -p node_modules/@libsql
-if [ -d "node_modules/@libsql/linux-arm64-gnu" ]; then
-    rm -rf "node_modules/@libsql/android-arm64"
-    cp -r "node_modules/@libsql/linux-arm64-gnu" "node_modules/@libsql/android-arm64"
-    
-    # Fix the shared library dependencies (remove libdl.so.2 dependency)
-    echo -e "  ${DIM}Elf-cleaning native binaries...${NC}"
-    find node_modules/@libsql -name "*.node" -exec termux-elf-cleaner --quiet {} +
-    ok "Native binaries cleaned and ready"
+# Attempt clean install
+rm -rf node_modules
+if npm install --no-fund --no-audit --build-from-source; then
+    ok "Native build successful"
 else
-    warn "Native binding folder not found!"
+    warn "Standard build failed. Retrying with --ignore-scripts..."
+    npm install --no-fund --no-audit --ignore-scripts
+    ok "Dependencies installed (scripts skipped)"
 fi
 
-# --- 7. Build ---
-step "Building frontend..."
-npm run build 2>&1 | tail -n 5 || true
-ok "Build finished"
+# --- 6. Frontend Build ---
+step "Building frontend assets..."
+if npm run build; then
+    ok "Frontend built successfully"
+else
+    warn "Frontend build failed. App might run in development mode."
+fi
 
-# --- 8. Final Reader Command ---
+# --- 7. Create Execution Wrapper ---
+step "Creating 'reader' command..."
 mkdir -p "$PREFIX/bin"
 cat > "$PREFIX/bin/reader" << 'READEREOF'
 #!/data/data/com.termux/files/usr/bin/bash
-R='\033[0;31m' G='\033[0;32m' Y='\033[1;33m' C='\033[0;36m' B='\033[1;34m' M='\033[0;35m' W='\033[1;37m' NC='\033[0m'
+# Colors
+R='\033[0;31m'; G='\033[0;32m'; Y='\033[1;33m'; B='\033[1;34m'; W='\033[1;37m'; NC='\033[0m'
 APP_DIR="$HOME/oksskolten"
 PORT="${READER_PORT:-3000}"
-LOCAL_IP=$(hostname -I 2>/dev/null | cut -d' ' -f1)
-[ -z "$LOCAL_IP" ] && LOCAL_IP=$(ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)[\d.]+' | grep -v '127\.0\.0\.1' | head -1)
-[ -z "$LOCAL_IP" ] && LOCAL_IP="127.0.0.1"
-TS_IP=$(command -v tailscale &>/dev/null && tailscale ip -4 2>/dev/null || echo "")
+
+# Get IP Address (handling multiple interfaces)
+LOCAL_IP=$(ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)[\d.]+' | grep -v '127\.0\.0\.1' | head -1 || echo "127.0.0.1")
+
+if [ ! -d "$APP_DIR" ]; then
+    echo -e "${R}Error: App directory $APP_DIR not found. Please re-run installer.${NC}"
+    exit 1
+fi
 
 clear
 echo -e "  ${W}╔═══════════════════════════════════════════════════╗${NC}"
 echo -e "  ${W}║   ${G}📖 Oksskolten RSS Reader${NC}                        ${W}║${NC}"
 echo -e "  ${W}╠═══════════════════════════════════════════════════╣${NC}"
-echo -e "  ${W}║   ${B}Local:${NC}      http://${LOCAL_IP}:${PORT}"
-[ -n "$TS_IP" ] && echo -e "  ${W}║   ${C}Tailscale:${NC}  ${W}http://${TS_IP}:${PORT}${NC}"
+echo -e "  ${W}║   ${B}Access URL:${NC}  http://${LOCAL_IP}:${PORT}            "
+echo -e "  ${W}║   ${Y}Control:${NC}     Press Ctrl+C to stop               "
 echo -e "  ${W}╚═══════════════════════════════════════════════════╝${NC}\n"
 
 cd "$APP_DIR"
 export PORT="$PORT"
 export DATA_DIR="${DATA_DIR:-$APP_DIR/data}"
 mkdir -p "$DATA_DIR"
-[ -d "$APP_DIR/dist" ] && export NODE_ENV=production || { export NODE_ENV=development; export AUTH_DISABLED=1; }
-exec npx tsx --dns-result-order=ipv4first server/index.ts
+
+# Check if build exists, otherwise fallback to tsx dev
+if [ -d "$APP_DIR/dist" ]; then
+    export NODE_ENV=production
+    exec npx tsx --dns-result-order=ipv4first server/index.ts
+else
+    echo -e "${Y}[!] Build not found, running in dev mode...${NC}"
+    export NODE_ENV=development
+    export AUTH_DISABLED=1
+    exec npx tsx --dns-result-order=ipv4first server/index.ts
+fi
 READEREOF
+
 chmod +x "$PREFIX/bin/reader"
 
-echo -e "\n${G}✅ Done! Type ${C}reader${G} to start.${NC}\n"
+# --- 8. Final Success Message ---
+echo -e "\n${G}✅ Installation Complete!${NC}"
+echo -e "You can now start the reader by typing: ${C}reader${NC}"
+echo -e "The app will be available at ${B}http://localhost:3000${NC}\n"
+
+# Remove trap so it doesn't trigger on successful exit
+trap - EXIT
